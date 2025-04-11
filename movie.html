@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>오늘의 영화 추천</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cafe24+Ssurround&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css" />
   <script src="main.js"></script>
 </head>
@@ -11,6 +13,19 @@
 
   <header>
     <h1>🎬 오늘의 영화 추천</h1>
+    <div class="search-bar">
+      <input
+        type="text"
+        id="search-input"
+        placeholder="영화 제목을 검색하세요"
+        oninput="renderSearchHistory()"
+        onkeydown="handleEnterKey(event)" />
+        <button id="search-button">🔍</button>
+      <div id="search-history" class="search-history" style="display: none;"></div>
+    </div>
+    
+    <button class="btn-login">로그인 / 회원가입</button>
+
     <button class="btn-login">로그인</button>
   </header>
 
@@ -22,47 +37,73 @@
     <button>스릴러</button>
     <button>로맨스</button>
     <button>스포츠</button>
+    <button>애니메이션</button>
+    <button>다큐멘터리</button>
+    <button>판타지</button>
   </div>
-  
-  <!-- 장르에 따라 영화가 바뀌는 영역 -->
-  <div class="container" id="genre-movie-container" style="margin-top: 20px;">
-    <!-- 여기에 API 응답으로 영화 카드들이 주입됨 -->
-  </div>
-  
 
+  <!-- 장르별 영화 카드 (필요시 이동 처리 가능) -->
+  <div class="container" id="genre-movie-container" style="margin-top: 20px;">
+    <!-- 장르 선택 결과 카드 주입 예정 -->
+  </div>
+
+  <!-- 박스오피스 + 이주의 HOT (영화/배우) + 추천 -->
   <div class="container">
-    <div class="list-box">
-      <div class="section-title">(주간) 박스오피스 순위</div>
-      <ol id="boxoffice-list">
-        <!-- API로 채워질 박스오피스 리스트 -->
-      </ol>
-    </div>
-  
     <div>
-      <div class="card">
-        <div class="section-title">이주의 Hot 랭킹 (영화)</div>
-        <!-- 배우 정보 (이미지 + 이름 등) 여기에 동적 주입 -->
+      <div class="list-box">
+        <div class="section-title">(주간) 박스오피스 순위</div>
+        <ol id="boxoffice-list">
+          <!-- API로 채워질 박스오피스 리스트 -->
+        </ol>
       </div>
-  
-      <div class="card" style="margin-top: 20px;">
+
+      <div class="card recommendation" style="margin-top: 20px;">
+        <div class="section-title"><span id="user-name">ghdrlfeh</span>홍길동님을 위한 추천 영화</div>
+        <div id="user-recommendation">
+          <!-- 추천 영화 정보 주입 -->
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card hot-movie">
+        <div class="section-title">이주의 Hot 랭킹 (영화)</div>
+      
+        <div class="slider-wrapper">
+          <button class="slide-button left" onclick="slideHotMovie(-1)">&#10094;</button>
+          
+          <div class="slider-content" id="hot-movie-slider">
+            <div class="slider-item"><img src="포스터1.jpg" /></div>
+            <div class="slider-item"><img src="포스터2.jpg" /></div>
+            <div class="slider-item"><img src="포스터3.jpg" /></div>
+            <div class="slider-item"><img src="포스터4.jpg" /></div>
+            <div class="slider-item"><img src="포스터5.jpg" /></div>
+          </div>
+          
+          <button class="slide-button right" onclick="slideHotMovie(1)">&#10095;</button>
+        </div>
+      </div>
+      
+
+      <div class="card hot-actor" style="margin-top: 20px;">
         <div class="section-title">이주의 Hot 랭킹 (배우)</div>
-        <div id="hot-actor">
-          <!-- 배우 정보 (이미지 + 이름 등) 여기에 동적 주입 -->
+        <div class="slider-wrapper">
+          <button class="slide-button left" onclick="slideHotActor(-1)">&#10094;</button>
+          
+          <div class="slider-content" id="hot-actor-slider">
+            <div class="slider-item"><img src="actor1.jpg" /></div>
+            <div class="slider-item"><img src="actor2.jpg" /></div>
+            <div class="slider-item"><img src="actor3.jpg" /></div>
+            <div class="slider-item"><img src="actor4.jpg" /></div>
+            <div class="slider-item"><img src="actor5.jpg" /></div>
+            <div class="slider-item"><img src="actor6.jpg" /></div>
+            <!-- ... 더 많은 배우 카드 -->
+          </div>
+          <button class="slide-button right" onclick="slideHotActor(1)">&#10095;</button>
         </div>
       </div>
     </div>
   </div>
-  
-  <div class="container" style="margin-top: 20px;">
-    <div class="card">
-      <div class="section-title">홍길동님을 위한 추천 영화</div>
-      <div id="user-recommendation">
-        <!-- 추천 영화 정보 여기에 동적 주입 -->
-      </div>
-    </div>
-  </div>
-  
-  
 
 </body>
 </html>
