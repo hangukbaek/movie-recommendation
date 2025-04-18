@@ -24,9 +24,8 @@
       <div id="search-history" class="search-history" style="display: none;"></div>
     </div>
     
-    <button class="btn-login">로그인 / 회원가입</button>
-
-    <button class="btn-login">로그인</button>
+    <button class="btn-login">회원가입</button>
+    <button onclick="toggleTheme()" class="theme-toggle-btn">🌓 테마 전환</button>
   </header>
 
   <div class="genre-buttons">
@@ -58,7 +57,7 @@
       </div>
 
       <div class="card recommendation" style="margin-top: 20px;">
-        <div class="section-title"><span id="user-name">ghdrlfeh</span>홍길동님을 위한 추천 영화</div>
+        <div class="section-title"><span id="user-name"></span>님을 위한 추천 영화</div>
         <div id="user-recommendation">
           <!-- 추천 영화 정보 주입 -->
         </div>
