@@ -1,60 +1,116 @@
-// main.js
-
-// ———————————————————————————————
-// 1) 구글 로그인 redirect 흐름 적용
-// ———————————————————————————————
 document.addEventListener("DOMContentLoaded", () => {
+  // ✅ 다크 모드 유지
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }
+
+  // ✅ 구글 로그인 버튼 설정
   const loginBtn = document.getElementById("googleLoginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const myPageBtn = document.getElementById("myPageBtn");
+  const loginStatus = document.getElementById("login-status");
+
   if (loginBtn) {
     loginBtn.addEventListener("click", () => {
-      // 현재 페이지 (path + query) 를 서버로 넘겨서
-      // 로그인 후 동일 페이지로 돌아오도록 redirect 파라미터 설정
       const currentPath = window.location.pathname + window.location.search;
       window.location.href = `/auth/google?redirect=${encodeURIComponent(currentPath)}`;
     });
   }
 
-  // 로그인 콜백으로 돌아왔을 때 URL에 token 이 있으면 처리
+  // ✅ 로그인 콜백으로 돌아온 경우 token 처리
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get("token");
   if (token) {
-    // 1) localStorage 에 JWT 저장
     localStorage.setItem("token", token);
-
-    // 2) 브라우저 콘솔에 성공 메시지
     console.log("✅ 로그인 성공: JWT가 저장되었습니다.");
-
-    // 3) 주소창에서 token 파라미터 제거
     urlParams.delete("token");
-    const newUrl =
-      window.location.pathname +
-      (urlParams.toString() ? "?" + urlParams.toString() : "");
+    const newUrl = window.location.pathname + (urlParams.toString() ? "?" + urlParams.toString() : "");
     history.replaceState({}, "", newUrl);
   }
-});
 
+  // ✅ 로그인 상태 확인 및 UI 갱신
+  const storedToken = localStorage.getItem("token");
+  if (storedToken) {
+    fetch("/api/profile", { headers: { Authorization: `Bearer ${storedToken}` } })
+      .then(res => res.json())
+      .then(data => {
+        if (data.userData) {
+          const displayName = data.userData.displayName || "사용자";
+          loginStatus.textContent = `${displayName}님이 로그인하였습니다`;
+          loginBtn.style.display = "none";
+          logoutBtn.style.display = "inline-block";
+          myPageBtn.style.display = "inline-block";
+          localStorage.setItem("userName", displayName);
+        }
+      })
+      .catch(err => {
+        console.error("프로필 확인 실패:", err);
+        localStorage.removeItem("token");
+      });
+  }
 
-// ———————————————————————————————
-// 2) 장르 버튼 클릭, 영화 목록 렌더링
-// ———————————————————————————————
-document.addEventListener("DOMContentLoaded", () => {
-  const buttons = document.querySelectorAll(".genre-buttons button");
-  const container = document.getElementById("genre-movie-container");
+  logoutBtn?.addEventListener("click", () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    loginStatus.textContent = "";
+    loginBtn.style.display = "inline-block";
+    logoutBtn.style.display = "none";
+    myPageBtn.style.display = "none";
+    alert("로그아웃되었습니다.");
+    window.location.reload();
+  });
 
-  buttons.forEach(button => {
+  myPageBtn?.addEventListener("click", () => {
+    window.location.href = "/mypage.html";
+  });
+
+  // ✅ 사용자 기반 추천 영화
+  const userName = localStorage.getItem("userName") || "게스트";
+  const nameEl = document.getElementById("user-name");
+  if (nameEl) nameEl.textContent = userName;
+
+  fetch(`https://api.example.com/recommendation?user=${encodeURIComponent(userName)}`)
+    .then(res => res.json())
+    .then(recommendations => {
+      const container = document.getElementById("user-recommendation");
+      if (!recommendations.length) {
+        container.innerHTML = "<p>추천 영화를 찾을 수 없습니다.</p>";
+        return;
+      }
+      container.innerHTML = "";
+      recommendations.forEach(movie => {
+        const card = document.createElement("div");
+        card.className = "slider-item";
+        card.innerHTML = `
+          <img src="${movie.poster}" alt="${movie.title}" style="width:100%; border-radius:12px;">
+          <p style="text-align:center; margin-top:10px;">${movie.title}</p>
+        `;
+        card.addEventListener("click", () => {
+          window.location.href = `detail.html?title=${encodeURIComponent(movie.title)}`;
+        });
+        container.appendChild(card);
+      });
+    })
+    .catch(err => {
+      const container = document.getElementById("user-recommendation");
+      container.innerHTML = "<p>추천 영화를 불러오는 데 실패했습니다 😥</p>";
+      console.error("추천 영화 API 실패:", err);
+    });
+
+  // ✅ 장르 버튼 클릭 시 API 호출
+  const genreButtons = document.querySelectorAll(".genre-buttons button");
+  const genreContainer = document.getElementById("genre-movie-container");
+
+  genreButtons.forEach(button => {
     button.addEventListener("click", () => {
-      // active 토글
-      buttons.forEach(btn => btn.classList.remove("active"));
+      genreButtons.forEach(btn => btn.classList.remove("active"));
       button.classList.add("active");
-
       const selectedGenre = button.textContent;
-      console.log(`선택된 장르: ${selectedGenre}`);
-
-      // API 호출 예시
       fetch(`https://api.example.com/movies?genre=${encodeURIComponent(selectedGenre)}`)
         .then(res => res.json())
         .then(movies => {
-          container.innerHTML = '';
+          genreContainer.innerHTML = "";
           movies.forEach(movie => {
             const card = document.createElement("div");
             card.className = "card";
@@ -62,24 +118,33 @@ document.addEventListener("DOMContentLoaded", () => {
               <img src="${movie.poster}" alt="${movie.title}" />
               <p style="text-align:center; margin-top:10px;">${movie.title}</p>
             `;
-            container.appendChild(card);
+            genreContainer.appendChild(card);
           });
         })
         .catch(err => {
-          container.innerHTML = "<p>영화를 불러오지 못했습니다 😥</p>";
+          genreContainer.innerHTML = "<p>영화를 불러오지 못했습니다 😥</p>";
           console.error("장르 영화 불러오기 실패:", err);
         });
     });
   });
 
-  // 초기 로딩 시 '액션' 기본 실행
-  if (buttons.length) buttons[0].click();
+  if (genreButtons.length > 0) {
+    genreButtons[0].click();
+  }
+
+  // ✅ 검색바 기능
+  const searchButton = document.getElementById("search-button");
+  const searchInput = document.getElementById("search-input");
+
+  searchButton?.addEventListener("click", () => {
+    const keyword = searchInput.value.trim();
+    if (keyword) executeSearch(keyword);
+  });
+
+  renderSearchHistory();
 });
 
-
-// ———————————————————————————————
-// 3) 이주의 Hot 랭킹 슬라이더
-// ———————————————————————————————
+// ✅ 핫랭킹 슬라이드 함수
 let hotMovieIndex = 0;
 let hotActorIndex = 0;
 
@@ -88,7 +153,6 @@ function slideHotMovie(direction) {
   const items = slider.querySelectorAll(".slider-item");
   const total = items.length;
   if (total <= 1) return;
-
   hotMovieIndex = Math.max(0, Math.min(hotMovieIndex + direction, total - 1));
   slider.style.transform = `translateX(-${hotMovieIndex * 100}%)`;
 }
@@ -98,85 +162,28 @@ function slideHotActor(direction) {
   const items = slider.querySelectorAll(".slider-item");
   const total = items.length;
   if (total <= 1) return;
-
   hotActorIndex = Math.max(0, Math.min(hotActorIndex + direction, total - 1));
   slider.style.transform = `translateX(-${hotActorIndex * 100}%)`;
 }
 
-
-// ———————————————————————————————
-// 4) 추천 영화 동적 로딩
-// ———————————————————————————————
-document.addEventListener("DOMContentLoaded", () => {
-  // (예시) 사용자 정보 — 실제론 로그인 후 JWT 디코딩해서 ID 사용
-  const user = { name: "윤주상", id: "user001" };
-
-  // 이름 표시
-  const userNameElement = document.getElementById("user-name");
-  if (userNameElement) userNameElement.textContent = user.name;
-
-  // 추천 API 호출
-  fetch(`https://api.example.com/recommendation?userId=${user.id}`)
+// ✅ 검색 실행 함수
+function executeSearch(keyword) {
+  saveSearchKeyword(keyword);
+  fetch(`https://api.example.com/search?query=${encodeURIComponent(keyword)}`)
     .then(res => res.json())
-    .then(movies => {
-      const container = document.getElementById("user-recommendation");
-      container.innerHTML = '';
-      if (!movies.length) {
-        container.innerHTML = "<p>추천 영화가 없습니다.</p>";
-        return;
-      }
-      movies.forEach(movie => {
-        const card = document.createElement("div");
-        card.className = "slider-item";
-        card.innerHTML = `
-          <img src="${movie.poster}" alt="${movie.title}" style="width:100%; border-radius:12px;">
-          <p style="text-align:center; margin-top:10px;">${movie.title}</p>
-        `;
-        container.appendChild(card);
-      });
+    .then(() => {
+      window.location.href = `search.html?query=${encodeURIComponent(keyword)}`;
     })
-    .catch(err => {
-      console.error("추천 영화 불러오기 실패:", err);
-      document.getElementById("user-recommendation").innerHTML = "<p>데이터를 불러오지 못했습니다.</p>";
+    .catch(() => {
+      window.location.href = `search.html?query=${encodeURIComponent(keyword)}`;
     });
-});
-
-
-// ———————————————————————————————
-// 5) 검색바 & 히스토리
-// ———————————————————————————————
-document.addEventListener("DOMContentLoaded", () => {
-  const searchButton = document.getElementById("search-button");
-  const searchInput  = document.getElementById("search-input");
-
-  if (searchButton) {
-    searchButton.addEventListener("click", () => {
-      const keyword = searchInput.value.trim();
-      if (keyword) executeSearch(keyword);
-    });
-  }
-
-  renderSearchHistory();
-});
+}
 
 function handleEnterKey(event) {
   if (event.key === "Enter") {
     const keyword = event.target.value.trim();
     if (keyword) executeSearch(keyword);
   }
-}
-
-function executeSearch(keyword) {
-  saveSearchKeyword(keyword);
-  fetch(`https://api.example.com/search?query=${encodeURIComponent(keyword)}`)
-    .then(res => res.json())
-    .then(data => {
-      console.log("✅ API 검색 결과:", data);
-      window.location.href = `search.html?query=${encodeURIComponent(keyword)}`;
-    })
-    .catch(() => {
-      window.location.href = `search.html?query=${encodeURIComponent(keyword)}`;
-    });
 }
 
 function saveSearchKeyword(keyword) {
@@ -194,7 +201,7 @@ function renderSearchHistory() {
     container.style.display = "none";
     return;
   }
-  container.innerHTML = '';
+  container.innerHTML = "";
   history.forEach(keyword => {
     const item = document.createElement("div");
     item.className = "search-history-item";
@@ -202,4 +209,16 @@ function renderSearchHistory() {
     container.appendChild(item);
   });
   container.style.display = "block";
+}
+
+// ✅ 다크모드 토글
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute("data-theme");
+  if (currentTheme === "dark") {
+    document.documentElement.removeAttribute("data-theme");
+    localStorage.setItem("theme", "light");
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+    localStorage.setItem("theme", "dark");
+  }
 }

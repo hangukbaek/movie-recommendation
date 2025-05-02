@@ -4,17 +4,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>오늘의 영화 추천</title>
+
+  <!-- 폰트 + 스타일 -->
+  <link href="https://fonts.googleapis.com/css2?family=Cafe24+Ssurround&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
-  <!-- main.js: 장르 관련 코드만 유지, 콜백형 구글 로그인은 JS 필요 최소화 -->
-  <script src="main.js" defer></script>
+  <script src="NotEffectAPI.js" defer></script>
+  <script src="server.js" defer></script>
 </head>
 <body>
   <header>
-    <h1>🎬 오늘의 영화 추천</h1>
-    <!-- '로그인' 버튼 클릭 시 /auth/google 로 이동 → 구글 로그인 페이지로 리디렉트 -->
-    <button class="btn-login" id="googleLoginBtn">로그인</button>
+    <div class="header-left">
+      <h1>🎬 오늘의 영화 추천</h1>
+    </div>
+  
+    <div class="header-center">
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="영화 제목을 검색하세요" />
+        <button id="search-button">🔍</button>
+        <div id="search-history" class="search-history" style="display: none;"></div>
+      </div>
+    </div>
+  
+    <div class="header-right">
+      <span id="login-status" style="color: white; margin-right: 10px;"></span>
+      <button class="btn-login" id="googleLoginBtn">로그인</button>
+      <button class="btn-logout" id="logoutBtn" style="display:none;">로그아웃</button>
+      <button class="btn-mypage" id="myPageBtn" style="display:none;">마이페이지</button>
+      <button onclick="toggleTheme()" class="theme-toggle-btn">🌓 테마 전환</button>
+    </div>
   </header>
-
+  
+  <!-- 장르 버튼 확장 -->
   <div class="genre-buttons">
     <button class="active">액션</button>
     <button>코미디</button>
@@ -23,82 +43,96 @@
     <button>스릴러</button>
     <button>로맨스</button>
     <button>스포츠</button>
+    <button>애니메이션</button>
+    <button>다큐멘터리</button>
+    <button>판타지</button>
   </div>
 
-  <!-- 장르에 따라 영화가 바뀌는 영역 -->
+  <!-- 장르별 영화 카드 -->
   <div class="container" id="genre-movie-container" style="margin-top: 20px;">
-    <!-- 여기에 API 응답으로 영화 카드들이 주입됨 -->
+    <!-- 장르 선택 결과 카드 주입 예정 -->
   </div>
 
+  <!-- 메인 콘텐츠 -->
   <div class="container">
-    <div class="list-box">
-      <div class="section-title">(주간) 박스오피스 순위</div>
-      <ol id="boxoffice-list">
-        <!-- API로 채워질 박스오피스 리스트 -->
-      </ol>
+    <div>
+      <!-- 박스오피스 -->
+      <div class="list-box">
+        <div class="section-title">(주간) 박스오피스 순위</div>
+        <ol id="boxoffice-list"></ol>
+      </div>
+
+      <!-- 사용자 맞춤 추천 -->
+      <div class="card recommendation" style="margin-top: 20px;">
+        <div class="section-title"><span id="user-name">홍길동</span>님을 위한 추천 영화</div>
+        <div id="user-recommendation"></div>
+      </div>
     </div>
 
     <div>
-      <div class="card">
+      <!-- Hot 랭킹 (영화) -->
+      <div class="card hot-movie">
         <div class="section-title">이주의 Hot 랭킹 (영화)</div>
-        <!-- 배우 정보 (이미지 + 이름 등) 여기에 동적 주입 -->
+        <div class="slider-wrapper">
+          <button class="slide-button left" onclick="slideHotMovie(-1)">&#10094;</button>
+          <div class="slider-content" id="hot-movie-slider">
+            <div class="slider-item"><img src="포스터1.jpg" /></div>
+            <div class="slider-item"><img src="포스터2.jpg" /></div>
+            <div class="slider-item"><img src="포스터3.jpg" /></div>
+            <div class="slider-item"><img src="포스터4.jpg" /></div>
+            <div class="slider-item"><img src="포스터5.jpg" /></div>
+          </div>
+          <button class="slide-button right" onclick="slideHotMovie(1)">&#10095;</button>
+        </div>
       </div>
 
-      <div class="card" style="margin-top: 20px;">
+      <!-- Hot 랭킹 (배우) -->
+      <div class="card hot-actor" style="margin-top: 20px;">
         <div class="section-title">이주의 Hot 랭킹 (배우)</div>
-        <div id="hot-actor">
-          <!-- 배우 정보 (이미지 + 이름 등) 여기에 동적 주입 -->
+        <div class="slider-wrapper">
+          <button class="slide-button left" onclick="slideHotActor(-1)">&#10094;</button>
+          <div class="slider-content" id="hot-actor-slider">
+            <div class="slider-item"><img src="actor1.jpg" /></div>
+            <div class="slider-item"><img src="actor2.jpg" /></div>
+            <div class="slider-item"><img src="actor3.jpg" /></div>
+            <div class="slider-item"><img src="actor4.jpg" /></div>
+            <div class="slider-item"><img src="actor5.jpg" /></div>
+            <div class="slider-item"><img src="actor6.jpg" /></div>
+          </div>
+          <button class="slide-button right" onclick="slideHotActor(1)">&#10095;</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="container" style="margin-top: 20px;">
-    <div class="card">
-      <div class="section-title">홍길동님을 위한 추천 영화</div>
-      <div id="user-recommendation">
-        <!-- 추천 영화 정보 여기에 동적 주입 -->
-      </div>
-    </div>
-  </div>
-
+  <!-- Google 로그인 콜백 스크립트 -->
   <script>
-    // 콜백 방식: 단순히 버튼을 누르면 /auth/google로 이동
     document.addEventListener("DOMContentLoaded", () => {
       const loginBtn = document.getElementById("googleLoginBtn");
       if (loginBtn) {
         loginBtn.addEventListener("click", () => {
-          // 서버 라우트 /auth/google 로 이동
-          window.location.href = "/auth/google";
+          const currentPath = window.location.pathname + window.location.search;
+          window.location.href = `/auth/google?redirect=${encodeURIComponent(currentPath)}`;
         });
       }
+
+      // JWT 저장 처리
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get("token");
+
+      if (token) {
+        localStorage.setItem("token", token);
+        console.log("✅ 로그인 성공: JWT가 저장되었습니다.");
+
+        // token 제거한 URL로 새로고침 없이 주소창 정리
+        urlParams.delete("token");
+        const newUrl =
+          window.location.pathname +
+          (urlParams.toString() ? "?" + urlParams.toString() : "");
+        history.replaceState({}, "", newUrl);
+      }
     });
-    document.addEventListener("DOMContentLoaded", () => {
-    const loginBtn = document.getElementById("googleLoginBtn");
-    if (loginBtn) {
-      loginBtn.addEventListener("click", () => {
-        const currentPath = window.location.pathname + window.location.search;
-        window.location.href = `/auth/google?redirect=${encodeURIComponent(currentPath)}`;
-      });
-    }
-
-    // ✅ 로그인 완료 후 토큰이 쿼리에 포함되어 있다면 저장 + 로그 출력
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-
-    if (token) {
-      localStorage.setItem("token", token);
-      console.log("✅ 로그인 성공: JWT가 저장되었습니다.");
-
-      // 주소창에서 token 제거 (URL 깔끔하게 유지)
-      urlParams.delete("token");
-      const newUrl =
-        window.location.pathname +
-        (urlParams.toString() ? "?" + urlParams.toString() : "");
-      history.replaceState({}, "", newUrl);
-    }
-  });
   </script>
-  
+
 </body>
 </html>

@@ -4,5 +4,6 @@
 # 환경 변수 파일 무시
 .env
 
+NotEffectAPI.js
 개발현황.txt
 개발일지.txt
