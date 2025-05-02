@@ -32,6 +32,28 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap; /* 👉 wrap 추가 */
+  gap: 10px; /* 👉 요소 간 간격 */
+}
+
+header .header-left {
+  flex: 1;
+  min-width: 200px; /* 👉 최소 너비 지정 */
+}
+
+header .header-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  min-width: 300px;
+}
+
+header .header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .header-bar {
@@ -106,7 +128,7 @@ header {
 }
 
 header h1 {
-  font-size: clamp(18px, 2vw, 1200px);
+  font-size: clamp(18px, 2vw, 500px);
   color: violet;
   text-align: center;
   font-family: 'Cafe24 Ssurround', sans-serif;
@@ -258,3 +280,4 @@ header h1 {
   display: flex;
   justify-content: center;
 }
+
