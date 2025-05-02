@@ -1,7 +1,6 @@
 {
   "name": "movie_recommend",
   "version": "1.0.0",
-  "description": "",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -11,8 +10,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "express-session": "^1.18.1",
+    "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.0.0",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0"
   }

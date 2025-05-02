@@ -1,107 +1,85 @@
+// main.js
+
+// ———————————————————————————————
+// 1) 구글 로그인 redirect 흐름 적용
+// ———————————————————————————————
 document.addEventListener("DOMContentLoaded", () => {
-    const buttons = document.querySelectorAll(".genre-buttons button");
-
-    buttons.forEach(button => {
-      button.addEventListener("click", () => {
-        // 모든 버튼에서 active 제거
-        buttons.forEach(btn => btn.classList.remove("active"));
-        // 클릭한 버튼에 active 추가
-        button.classList.add("active");
-
-        // 여기에 장르에 따라 API 호출 또는 필터링 로직 추가 가능
-        const genre = button.textContent;
-        console.log(`선택된 장르: ${genre}`);
-      });
+  const loginBtn = document.getElementById("googleLoginBtn");
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
+      // 현재 페이지 (path + query) 를 서버로 넘겨서
+      // 로그인 후 동일 페이지로 돌아오도록 redirect 파라미터 설정
+      const currentPath = window.location.pathname + window.location.search;
+      window.location.href = `/auth/google?redirect=${encodeURIComponent(currentPath)}`;
     });
-  });
+  }
 
-  //버튼 클릭시 API호출 UI 갱신
-  document.addEventListener("DOMContentLoaded", () => {
-    const buttons = document.querySelectorAll(".genre-buttons button");
-    const container = document.getElementById("genre-movie-container");
+  // 로그인 콜백으로 돌아왔을 때 URL에 token 이 있으면 처리
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+  if (token) {
+    // 1) localStorage 에 JWT 저장
+    localStorage.setItem("token", token);
 
-    buttons.forEach(button => {
-      button.addEventListener("click", () => {
-        // 1. active 클래스 토글
-        buttons.forEach(btn => btn.classList.remove("active"));
-        button.classList.add("active");
+    // 2) 브라우저 콘솔에 성공 메시지
+    console.log("✅ 로그인 성공: JWT가 저장되었습니다.");
 
-        // 2. 장르 텍스트 추출
-        const selectedGenre = button.textContent;
+    // 3) 주소창에서 token 파라미터 제거
+    urlParams.delete("token");
+    const newUrl =
+      window.location.pathname +
+      (urlParams.toString() ? "?" + urlParams.toString() : "");
+    history.replaceState({}, "", newUrl);
+  }
+});
 
-        // 3. API 호출
-        fetch(`https://api.example.com/movies?genre=${encodeURIComponent(selectedGenre)}`)
-          .then(res => res.json())
-          .then(movies => {
-            // 4. 영화 목록 그리기
-            container.innerHTML = ''; // 기존 내용 초기화
 
-            movies.forEach(movie => {
-              const card = document.createElement("div");
-              card.className = "card";
+// ———————————————————————————————
+// 2) 장르 버튼 클릭, 영화 목록 렌더링
+// ———————————————————————————————
+document.addEventListener("DOMContentLoaded", () => {
+  const buttons = document.querySelectorAll(".genre-buttons button");
+  const container = document.getElementById("genre-movie-container");
 
-              card.innerHTML = `
-                <img src="${movie.poster}" alt="${movie.title}" />
-                <p style="text-align:center; margin-top:10px;">${movie.title}</p>
-              `;
+  buttons.forEach(button => {
+    button.addEventListener("click", () => {
+      // active 토글
+      buttons.forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
 
-              container.appendChild(card);
-            });
-          })
-          .catch(err => {
-            container.innerHTML = "<p>영화를 불러오지 못했습니다 😥</p>";
-            console.error("장르 영화 불러오기 실패:", err);
+      const selectedGenre = button.textContent;
+      console.log(`선택된 장르: ${selectedGenre}`);
+
+      // API 호출 예시
+      fetch(`https://api.example.com/movies?genre=${encodeURIComponent(selectedGenre)}`)
+        .then(res => res.json())
+        .then(movies => {
+          container.innerHTML = '';
+          movies.forEach(movie => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+              <img src="${movie.poster}" alt="${movie.title}" />
+              <p style="text-align:center; margin-top:10px;">${movie.title}</p>
+            `;
+            container.appendChild(card);
           });
-      });
-    });
-
-    // 초기 로딩 시 '액션' 장르 기본 실행
-    buttons[0].click();
-  });
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const params = new URLSearchParams(window.location.search);
-    const genre = params.get("genre");
-    const container = document.getElementById("genre-result");
-
-    if (!genre) {
-      container.innerHTML = "<p>장르 정보가 없습니다.</p>";
-      return;
-    }
-
-    fetch(`https://api.example.com/movies?genre=${encodeURIComponent(genre)}`)
-      .then(res => res.json())
-      .then(movies => {
-        if (!movies.length) {
-          container.innerHTML = `<p>${genre} 장르의 영화가 없습니다.</p>`;
-          return;
-        }
-
-        movies.forEach(movie => {
-          const card = document.createElement("div");
-          card.className = "card";
-          card.style.cursor = "pointer";
-
-          card.innerHTML = `
-            <img src="${movie.poster}" alt="${movie.title}" />
-            <p style="text-align:center; margin-top:10px;">${movie.title}</p>
-          `;
-
-          // 카드 클릭 시 상세 페이지로 이동
-          card.addEventListener("click", () => {
-            // 예: id 또는 title 사용 (id가 있다면 더 좋음)
-            window.location.href = `detail.html?title=${encodeURIComponent(movie.title)}`;
-          });
-
-          container.appendChild(card);
+        })
+        .catch(err => {
+          container.innerHTML = "<p>영화를 불러오지 못했습니다 😥</p>";
+          console.error("장르 영화 불러오기 실패:", err);
         });
-      })
-      .catch(err => {
-        container.innerHTML = "<p>영화를 불러오는 데 실패했습니다 😥</p>";
-        console.error(err);
-      });
+    });
   });
-//이주의 핫랭킹 버튼 슬라이드 기능을 위한 코드 
+
+  // 초기 로딩 시 '액션' 기본 실행
+  if (buttons.length) buttons[0].click();
+});
+
+
+// ———————————————————————————————
+// 3) 이주의 Hot 랭킹 슬라이더
+// ———————————————————————————————
 let hotMovieIndex = 0;
 let hotActorIndex = 0;
 
@@ -109,13 +87,9 @@ function slideHotMovie(direction) {
   const slider = document.getElementById("hot-movie-slider");
   const items = slider.querySelectorAll(".slider-item");
   const total = items.length;
-
   if (total <= 1) return;
 
-  hotMovieIndex += direction;
-  if (hotMovieIndex < 0) hotMovieIndex = 0;
-  if (hotMovieIndex >= total) hotMovieIndex = total - 1;
-
+  hotMovieIndex = Math.max(0, Math.min(hotMovieIndex + direction, total - 1));
   slider.style.transform = `translateX(-${hotMovieIndex * 100}%)`;
 }
 
@@ -123,45 +97,37 @@ function slideHotActor(direction) {
   const slider = document.getElementById("hot-actor-slider");
   const items = slider.querySelectorAll(".slider-item");
   const total = items.length;
-
   if (total <= 1) return;
 
-  hotActorIndex += direction;
-  if (hotActorIndex < 0) hotActorIndex = 0;
-  if (hotActorIndex >= total) hotActorIndex = total - 1;
-
+  hotActorIndex = Math.max(0, Math.min(hotActorIndex + direction, total - 1));
   slider.style.transform = `translateX(-${hotActorIndex * 100}%)`;
 }
 
-//홍길동님을 위한 추천 영화 동적 변경을 위한 코드 구현 
+
+// ———————————————————————————————
+// 4) 추천 영화 동적 로딩
+// ———————————————————————————————
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. 사용자 이름을 받아온다고 가정 (나중엔 로그인된 사용자 정보로 대체 가능)
-  const user = {
-    name: "윤주상", // 서버 또는 로컬스토리지 등에서 받아올 수 있음
-    id: "user001"
-  };
+  // (예시) 사용자 정보 — 실제론 로그인 후 JWT 디코딩해서 ID 사용
+  const user = { name: "윤주상", id: "user001" };
 
-  // 2. 사용자 이름을 HTML에 반영
+  // 이름 표시
   const userNameElement = document.getElementById("user-name");
-  if (userNameElement) {
-    userNameElement.textContent = user.name;
-  }
+  if (userNameElement) userNameElement.textContent = user.name;
 
-  // 3. 사용자 기반 추천 API 호출 (가정)
+  // 추천 API 호출
   fetch(`https://api.example.com/recommendation?userId=${user.id}`)
     .then(res => res.json())
     .then(movies => {
       const container = document.getElementById("user-recommendation");
       container.innerHTML = '';
-
       if (!movies.length) {
         container.innerHTML = "<p>추천 영화가 없습니다.</p>";
         return;
       }
-
       movies.forEach(movie => {
         const card = document.createElement("div");
-        card.className = "slider-item"; // 슬라이드용 구조에도 호환되게
+        card.className = "slider-item";
         card.innerHTML = `
           <img src="${movie.poster}" alt="${movie.title}" style="width:100%; border-radius:12px;">
           <p style="text-align:center; margin-top:10px;">${movie.title}</p>
@@ -176,17 +142,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-//검색바 기록 남기기 및 엔터 또는 돋보기 클릭시 가능
+// ———————————————————————————————
+// 5) 검색바 & 히스토리
+// ———————————————————————————————
 document.addEventListener("DOMContentLoaded", () => {
   const searchButton = document.getElementById("search-button");
-  const searchInput = document.getElementById("search-input");
+  const searchInput  = document.getElementById("search-input");
 
   if (searchButton) {
     searchButton.addEventListener("click", () => {
       const keyword = searchInput.value.trim();
-      if (keyword !== "") {
-        executeSearch(keyword);
-      }
+      if (keyword) executeSearch(keyword);
     });
   }
 
@@ -196,28 +162,19 @@ document.addEventListener("DOMContentLoaded", () => {
 function handleEnterKey(event) {
   if (event.key === "Enter") {
     const keyword = event.target.value.trim();
-    if (keyword !== "") {
-      executeSearch(keyword);
-    }
+    if (keyword) executeSearch(keyword);
   }
 }
 
 function executeSearch(keyword) {
-  // 기록 저장
   saveSearchKeyword(keyword);
-
-  // ✅ API 호출
   fetch(`https://api.example.com/search?query=${encodeURIComponent(keyword)}`)
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
       console.log("✅ API 검색 결과:", data);
-
-      // 예: 검색 페이지로 이동
       window.location.href = `search.html?query=${encodeURIComponent(keyword)}`;
     })
-    .catch(error => {
-      console.error("❌ API 호출 실패:", error);
-      // 실패하더라도 검색 페이지로 이동
+    .catch(() => {
       window.location.href = `search.html?query=${encodeURIComponent(keyword)}`;
     });
 }
@@ -233,25 +190,16 @@ function saveSearchKeyword(keyword) {
 function renderSearchHistory() {
   const container = document.getElementById("search-history");
   const history = JSON.parse(localStorage.getItem("searchHistory")) || [];
-
   if (!history.length) {
     container.style.display = "none";
     return;
   }
-
-  container.innerHTML = "";
+  container.innerHTML = '';
   history.forEach(keyword => {
     const item = document.createElement("div");
     item.className = "search-history-item";
-    item.innerHTML = `
-      <span onclick="goToSearch('${keyword}')">${keyword}</span>
-    `;
+    item.innerHTML = `<span onclick="executeSearch('${keyword}')">${keyword}</span>`;
     container.appendChild(item);
   });
-
   container.style.display = "block";
-}
-
-function goToSearch(keyword) {
-  executeSearch(keyword);
 }
