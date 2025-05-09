@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>오늘의 영화 추천</title>
+
+  <!-- 폰트 + 스타일 -->
+  <link href="https://fonts.googleapis.com/css2?family=Cafe24+Ssurround&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="main.js" defer></script>
+  <script src="server.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <h1>🎬 오늘의 영화 추천</h1>
+    </div>
+
+    <div class="header-center">
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="영화 제목을 검색하세요" />
+        <button id="search-button">🔍</button>
+        <div id="search-history" class="search-history" style="display: none;"></div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <span id="login-status" style="color: white; margin-right: 10px;"></span>
+      <button class="btn-login" id="googleLoginBtn">로그인</button>
+      <button class="btn-logout" id="logoutBtn" style="display:none;">로그아웃</button>
+      <button class="btn-mypage" id="myPageBtn" style="display:none;">마이페이지</button>
+      <button onclick="toggleTheme()" class="theme-toggle-btn">🌓 테마 전환</button>
+    </div>
+  </header>
+</body>
+</html>
