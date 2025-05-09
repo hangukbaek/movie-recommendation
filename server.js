@@ -26,13 +26,15 @@ mongoose.connect(MONGO_URI, {
 const userSchema = new mongoose.Schema({
   googleId:     { type: String, required: true, unique: true },
   email:        { type: String, required: true },
-  displayName:  String,
+  displayName:  { type: String },
   preferences: {
     favoriteGenres: { type: [String], default: [] },
-    favoriteActors: { type: [String], default: [] },
+    gender:         { type: String, default: '' }, // 남성, 여성, 기타
+    age:            { type: String, default: '' }  // 예: "20대", "30대"
   }
-}, { timestamps: true });
-
+}, {
+  timestamps: true // createdAt, updatedAt 자동 생성
+});
 const User = mongoose.model("User", userSchema);
 
 // ----------------------
@@ -54,7 +56,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// 정적 파일 서빙 (index.html, main.js, style.css 등)
+// 정적 파일 서빙
 app.use(express.static(path.join(__dirname, "/")));
 
 // ----------------------
@@ -66,7 +68,6 @@ passport.use(new GoogleStrategy({
     callbackURL:  "/auth/google/callback"
   },
   async (accessToken, refreshToken, profile, done) => {
-    // profile에서 필요한 정보 추출
     const userInfo = {
       googleId:    profile.id,
       email:       profile.emails?.[0].value || "",
@@ -75,56 +76,39 @@ passport.use(new GoogleStrategy({
     done(null, userInfo);
   }
 ));
-
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((obj, done) => done(null, obj));
 
 // ----------------------
 // 5) OAuth Redirect 흐름
 // ----------------------
-// 5-1) 로그인 시작
 app.get("/auth/google", (req, res, next) => {
-  // passport 0.6.x 이상: req.logout(callback)
-  req.logout(err => {
-    if (err) console.error("Logout error:", err);
-    const redirect = req.query.redirect || "/";
-    passport.authenticate("google", {
-      scope: ["profile", "email"],
-      state: redirect
-    })(req, res, next);
-  });
+  const redirect = req.query.redirect || "/";
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    state: redirect,
+    prompt: "select_account"
+  })(req, res, next);
 });
-
-
-// 5-2) 콜백 처리
-app.get("/auth/google/callback",
+app.get(
+  "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/login-failed" }),
   async (req, res) => {
     try {
-      // req.user 에서 profile info 꺼내기
       const { googleId, email, displayName } = req.user;
-
-      // DB에 upsert (없으면 생성, 있으면 업데이트)
       const user = await User.findOneAndUpdate(
         { googleId },
         { $set: { email, displayName } },
         { new: true, upsert: true }
       );
-
-      // JWT 발급 (payload에 user._id 사용)
       const token = jwt.sign(
-        { userId: user._id, googleId: user.googleId },
+        { userId: user._id },
         JWT_SECRET,
         { expiresIn: "1h" }
       );
-
-      // state 로 넘어온 redirect URL 에 token 붙여서 리다이렉트
       const redirect = req.query.state || "/";
-      const hasQuery = redirect.includes("?");
-      const delimiter = hasQuery ? "&" : "?";
-      const redirectUrl = `${redirect}${delimiter}token=${token}`;
-
-      res.redirect(redirectUrl);
+      const delimiter = redirect.includes("?") ? "&" : "?";
+      res.redirect(`${redirect}${delimiter}token=${token}`);
     } catch (err) {
       console.error("OAuth 콜백 처리 중 오류:", err);
       res.redirect("/login-failed");
@@ -133,29 +117,31 @@ app.get("/auth/google/callback",
 );
 
 // ----------------------
-// 6) 로그인 실패 라우트
+// 6) 로그인 실패
 // ----------------------
 app.get("/login-failed", (req, res) => {
   res.send("로그인 실패! 다시 시도하세요.");
 });
 
 // ----------------------
-// 7) JWT 검증용 예시 API
+// 7) 프로필 조회
 // ----------------------
-app.get("/api/profile", (req, res) => {
+app.get("/api/profile", async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: "No token provided" });
   const token = authHeader.replace("Bearer ", "");
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    return res.json({ message: "Profile data", userData: decoded });
-  } catch {
+    const user = await User.findById(decoded.userId).lean();
+    if (!user) return res.status(404).json({ error: "User not found" });
+    return res.json({ message: "Profile data", userData: user });
+  } catch (e) {
     return res.status(401).json({ error: "Invalid token" });
   }
 });
 
 // ----------------------
-// 8) 사용자 선호 설정 저장 API
+// 8) 선호 설정 저장
 // ----------------------
 app.post("/api/user/preferences", async (req, res) => {
   const authHeader = req.headers.authorization;
@@ -167,12 +153,11 @@ app.post("/api/user/preferences", async (req, res) => {
   } catch {
     return res.status(401).json({ error: "Invalid token" });
   }
-
-  const { favoriteGenres, favoriteActors } = req.body;
+  const { favoriteGenres, gender, age } = req.body;
   const updates = {};
   if (favoriteGenres) updates["preferences.favoriteGenres"] = favoriteGenres;
-  if (favoriteActors) updates["preferences.favoriteActors"] = favoriteActors;
-
+  if (gender)         updates["preferences.gender"] = gender;
+  if (age)            updates["preferences.age"] = age;
   try {
     const user = await User.findByIdAndUpdate(
       decoded.userId,
