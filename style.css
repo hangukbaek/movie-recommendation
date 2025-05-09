@@ -262,3 +262,68 @@ h1 {
 #slide-right {
   right: 16px;
 }
+
+.hidden {
+  display: none !important;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.genre-section {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.genre-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.genre-block h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #2C3E50;
+}
+
+/* 슬라이드 스타일 */
+.genre-slider {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 10px 0;
+  scroll-snap-type: x mandatory;
+
+  /* ✅ 가운데 정렬 추가 */
+  justify-content: center;
+}
+
+.genre-slider::-webkit-scrollbar {
+  height: 8px;
+}
+
+.genre-slider::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.genre-slider .movie-card {
+  flex: 0 0 auto;
+  width: 200px;
+  scroll-snap-align: start;
+}
