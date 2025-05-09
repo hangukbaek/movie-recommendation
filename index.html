@@ -2,14 +2,15 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>오늘의 영화 추천</title>
-
-  <!-- 폰트 + 스타일 -->
   <link href="https://fonts.googleapis.com/css2?family=Cafe24+Ssurround&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
-  <script src="main.js" defer></script>
-  <script src="server.js" defer></script>
+  <script defer src="main.js"></script>
+  <script defer src="weeklyrank.js"></script>
+  <script defer src="dailyrank.js"></script>
+  <script defer src="server.js"></script>
+  <script defer src="genre.js"></script> <!-- ✅ 추가 -->
 </head>
 <body>
   <header>
@@ -30,82 +31,49 @@
       <button class="btn-login" id="googleLoginBtn">로그인</button>
       <button class="btn-logout" id="logoutBtn" style="display:none;">로그아웃</button>
       <button class="btn-mypage" id="myPageBtn" style="display:none;">마이페이지</button>
-      <button onclick="toggleTheme()" class="theme-toggle-btn">🌓 테마 전환</button>
     </div>
   </header>
-  
-  <!-- 장르 버튼 확장 -->
+
   <div class="genre-buttons">
-    <button class="active">액션</button>
+    <button>액션</button>
     <button>코미디</button>
     <button>SF</button>
     <button>공포</button>
     <button>스릴러</button>
     <button>로맨스</button>
-    <button>스포츠</button>
+    <button>음악</button>
     <button>애니메이션</button>
     <button>다큐멘터리</button>
     <button>판타지</button>
   </div>
 
-  <!-- 장르별 영화 카드 -->
-  <div class="container" id="genre-movie-container" style="margin-top: 20px;">
-    <!-- 장르 선택 결과 카드 주입 예정 -->
-  </div>
+  <!-- ✅ 슬라이드 컨테이너 (초기 숨김) -->
+  <div class="container hidden" id="genre-movie-container" style="margin-top: 20px;"></div>
 
-  <!-- 메인 콘텐츠 -->
   <div class="container">
-    <div>
-      <!-- 박스오피스 -->
-      <div class="list-box">
-        <div class="section-title">(주간) 박스오피스 순위</div>
-        <ol id="boxoffice-list"></ol>
-      </div>
-
-      <!-- 사용자 맞춤 추천 -->
-      <div class="card recommendation" style="margin-top: 20px;">
-        <div class="section-title"><span id="user-name">홍길동</span>님을 위한 추천 영화</div>
-        <div id="user-recommendation"></div>
-      </div>
+    <div class="list-box">
+      <div class="section-title">(일간) 박스오피스 순위</div>
+      <ul id="boxoffice-list" class="boxoffice-cards"></ul>
     </div>
 
-    <div>
-      <!-- Hot 랭킹 (영화) -->
-      <div class="card hot-movie">
-        <div class="section-title">이주의 Hot 랭킹 (영화)</div>
-        <div class="slider-wrapper">
-          <button class="slide-button left" onclick="slideHotMovie(-1)">&#10094;</button>
-          <div class="slider-content" id="hot-movie-slider">
-            <div class="slider-item"><img src="포스터1.jpg" /></div>
-            <div class="slider-item"><img src="포스터2.jpg" /></div>
-            <div class="slider-item"><img src="포스터3.jpg" /></div>
-            <div class="slider-item"><img src="포스터4.jpg" /></div>
-            <div class="slider-item"><img src="포스터5.jpg" /></div>
-          </div>
-          <button class="slide-button right" onclick="slideHotMovie(1)">&#10095;</button>
+    <section id="hot-movie-section">
+      <h2> 이 주의 hot 랭킹(영화) </h2>
+      <div class="slider-container">
+        <div id="hot-movie-list-wrapper">
+          <div id="slider-viewport">
+            <div id="hot-movie-list"></div>
+          </div>      
+          <button id="slide-left" class="slide-button" aria-label="이전">❮</button>
+          <button id="slide-right" class="slide-button" aria-label="다음">❯</button>
         </div>
       </div>
-
-      <!-- Hot 랭킹 (배우) -->
-      <div class="card hot-actor" style="margin-top: 20px;">
-        <div class="section-title">이주의 Hot 랭킹 (배우)</div>
-        <div class="slider-wrapper">
-          <button class="slide-button left" onclick="slideHotActor(-1)">&#10094;</button>
-          <div class="slider-content" id="hot-actor-slider">
-            <div class="slider-item"><img src="actor1.jpg" /></div>
-            <div class="slider-item"><img src="actor2.jpg" /></div>
-            <div class="slider-item"><img src="actor3.jpg" /></div>
-            <div class="slider-item"><img src="actor4.jpg" /></div>
-            <div class="slider-item"><img src="actor5.jpg" /></div>
-            <div class="slider-item"><img src="actor6.jpg" /></div>
-          </div>
-          <button class="slide-button right" onclick="slideHotActor(1)">&#10095;</button>
-        </div>
-      </div>
-    </div>
+    </section>
   </div>
 
-  <!-- Google 로그인 콜백 스크립트 -->
+  <div class="card hot-actor" style="margin-top: 20px;">
+    <div class="section-title">이런 영화 어떠세요?</div>
+  </div>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const loginBtn = document.getElementById("googleLoginBtn");
@@ -133,6 +101,5 @@
       }
     });
   </script>
-
 </body>
 </html>
