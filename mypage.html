@@ -4,20 +4,16 @@
   <meta charset="UTF-8" />
   <title>마이페이지</title>
   <link rel="stylesheet" href="mypage.css" />
+  <script src="mypage.js" defer></script>
 </head>
 <body>
   <!-- 상단 버튼 -->
   <button id="return-home" class="fixed-btn" onclick="window.location.href='/'">메인으로</button>
-  <button id="edit-profile" class="fixed-btn">프로필 수정</button>
   <button id="theme-toggle" class="fixed-btn">🌞 테마 전환</button>
 
   <h1 id="page-title">마이페이지</h1>
 
   <form id="profile-form">
-    <label>이름:
-      <input type="text" id="input-name" />
-    </label>
-
     <label>성별:</label>
     <div class="gender-buttons-wrapper">
       <button type="button" class="gender-button" data-value="남성">남성</button>
@@ -50,18 +46,12 @@
       <button type="button" class="age-button">60대 이상</button>
     </div>
     <input type="hidden" id="input-age" />
-
-    <button type="submit">저장</button>
   </form>
 
-  <div id="profile-display">
-    <h2>내 정보</h2>
-    <p id="display-name"></p>
-    <p id="display-gender"></p>
-    <p id="display-genre"></p>
-    <p id="display-age"></p>
+  <!-- 사용자님을 위한 추천 영화 컨테이너 -->
+  <div class="user-recommend">
+    <h2>사용자님을 위한 추천 영화</h2>
+    <div id="user-recommend-content"></div>
   </div>
-
-  <script src="mypage.js"></script>
 </body>
 </html>

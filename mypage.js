@@ -4,98 +4,43 @@ const ageButtons = document.querySelectorAll('.age-button');
 const inputGenre = document.getElementById('input-genre');
 const inputGender = document.getElementById('input-gender');
 const inputAge = document.getElementById('input-age');
-const editBtn = document.getElementById('edit-profile');
-let isEditing = false;
 
-function markEditing() {
-  if (!isEditing) {
-    editBtn.textContent = '수정 중...';
-    isEditing = true;
-  }
+function saveProfile() {
+  localStorage.setItem('profileGender', inputGender.value);
+  localStorage.setItem('profileGenre', inputGenre.value);
+  localStorage.setItem('profileAge', inputAge.value);
 }
 
-// 장르
+// 장르 선택
 genreButtons.forEach(button => {
   button.addEventListener('click', () => {
     button.classList.toggle('selected');
-    const selectedGenres = Array.from(genreButtons)
+    const selected = Array.from(genreButtons)
       .filter(btn => btn.classList.contains('selected'))
       .map(btn => btn.textContent);
-    inputGenre.value = selectedGenres.join(',');
-    markEditing();
+    inputGenre.value = selected.join(',');
+    saveProfile();
   });
 });
 
-// 성별
+// 성별 선택
 genderButtons.forEach(button => {
   button.addEventListener('click', () => {
     genderButtons.forEach(btn => btn.classList.remove('selected'));
     button.classList.add('selected');
     inputGender.value = button.dataset.value;
-    markEditing();
+    saveProfile();
   });
 });
 
-// 연령대
+// 연령대 선택
 ageButtons.forEach(button => {
   button.addEventListener('click', () => {
     ageButtons.forEach(btn => btn.classList.remove('selected'));
     button.classList.add('selected');
     inputAge.value = button.textContent;
-    markEditing();
+    saveProfile();
   });
-});
-
-// 이름 입력 시
-document.getElementById('input-name').addEventListener('input', markEditing);
-
-// 저장
-document.getElementById('profile-form').addEventListener('submit', function (e) {
-  e.preventDefault();
-
-  const name = document.getElementById('input-name').value;
-  const gender = inputGender.value;
-  const genre = inputGenre.value;
-  const age = inputAge.value;
-
-  localStorage.setItem('profileName', name);
-  localStorage.setItem('profileGender', gender);
-  localStorage.setItem('profileGenre', genre);
-  localStorage.setItem('profileAge', age);
-
-  alert('저장되었습니다!');
-  displayProfile();
-
-  editBtn.textContent = '수정 완료!';
-  isEditing = false;
-  setTimeout(() => {
-    if (!isEditing) editBtn.textContent = '프로필 수정';
-  }, 1500);
-});
-
-// 수정 모드 진입 시 기존 정보 채우기
-editBtn.addEventListener('click', () => {
-  document.getElementById('input-name').value = localStorage.getItem('profileName') || '';
-
-  genderButtons.forEach(btn => {
-    const val = localStorage.getItem('profileGender');
-    btn.classList.toggle('selected', btn.dataset.value === val);
-    if (btn.classList.contains('selected')) inputGender.value = val;
-  });
-
-  const selectedGenres = (localStorage.getItem('profileGenre') || '').split(',');
-  genreButtons.forEach(btn => {
-    btn.classList.toggle('selected', selectedGenres.includes(btn.textContent));
-  });
-  inputGenre.value = selectedGenres.join(',');
-
-  ageButtons.forEach(btn => {
-    const val = localStorage.getItem('profileAge');
-    btn.classList.toggle('selected', btn.textContent === val);
-    if (btn.classList.contains('selected')) inputAge.value = val;
-  });
-
-  markEditing();
 });
 
 // 테마 전환
@@ -113,19 +58,39 @@ document.getElementById('theme-toggle').addEventListener('click', () => {
   }
 });
 
-// 화면 로드 시
+// 초기화
 window.addEventListener('DOMContentLoaded', () => {
+  inputGender.value = localStorage.getItem('profileGender') || '';
+  inputGenre.value = localStorage.getItem('profileGenre') || '';
+  inputAge.value = localStorage.getItem('profileAge') || '';
+
+  genreButtons.forEach(btn => {
+    if ((inputGenre.value || '').split(',').includes(btn.textContent)) {
+      btn.classList.add('selected');
+    }
+  });
+
+  genderButtons.forEach(btn => {
+    if (btn.dataset.value === inputGender.value) {
+      btn.classList.add('selected');
+    }
+  });
+
+  ageButtons.forEach(btn => {
+    if (btn.textContent === inputAge.value) {
+      btn.classList.add('selected');
+    }
+  });
+
   if (localStorage.getItem('theme') === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     document.getElementById('theme-toggle').textContent = '🌙 테마 전환';
   }
-  displayProfile();
-});
 
-// 정보 표시
-function displayProfile() {
-  document.getElementById('display-name').textContent = `이름: ${localStorage.getItem('profileName') || ''}`;
-  document.getElementById('display-gender').textContent = `성별: ${localStorage.getItem('profileGender') || ''}`;
-  document.getElementById('display-genre').textContent = `선호 장르: ${localStorage.getItem('profileGenre') || ''}`;
-  document.getElementById('display-age').textContent = `연령대: ${localStorage.getItem('profileAge') || ''}`;
-}
+  // 추천 영화 이미지 주입
+  const recommend = document.getElementById('user-recommend-content');
+  const posters = ['movie1.jpg', 'movie2.jpg', 'movie3.jpg'];
+  recommend.innerHTML = posters.map(src => `
+    <img src="${src}" alt="추천 영화 포스터" />
+  `).join('');
+});

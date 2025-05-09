@@ -1,42 +1,56 @@
+:root {
+  --bg-color: #fefcf7;
+  --text-color: #2c3e50;
+  --card-bg: #ffffff;
+  --btn-bg: #dce5f5;
+  --btn-text: #2c3e50;
+  --selected-bg: #4a90e2;
+  --selected-text: #ffffff;
+  --title-color: #2c3e50;
+  --recommend-bg: #f0f0f0;
+}
+
 :root[data-theme="dark"] {
   --bg-color: #1e1e1e;
   --text-color: #f0f0f0;
   --card-bg: #2a2a2a;
-  --btn-bg: #4a90e2;
-  --btn-text: white;
+  --btn-bg: #3a3f4b;
+  --btn-text: #ffffff;
+  --selected-bg: #4a90e2;
+  --selected-text: #ffffff;
   --title-color: #ffffff;
+  --recommend-bg: #2d2d2d;
 }
+
 body {
-  font-family: 'Nanum Square Round', 'Noto Sans KR', sans-serif;
-  background: var(--bg-color, #fefcf7);
-  color: var(--text-color, #333);
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
   margin: 0;
   padding: 20px;
 }
+
 #page-title {
   text-align: center;
-  color: var(--title-color, #2C3E50);
+  color: var(--title-color);
 }
+
 form {
-  background: var(--card-bg, #ffffff);
+  background: var(--card-bg);
   padding: 20px;
   border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-width: 600px;
   margin: 0 auto;
 }
+
 label {
   display: block;
   margin-bottom: 12px;
   font-weight: bold;
 }
-input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-}
+
+/* 버튼 그룹 */
 .genre-buttons-wrapper,
 .gender-buttons-wrapper,
 .age-buttons-wrapper {
@@ -45,76 +59,75 @@ input[type="text"] {
   gap: 10px;
   margin-bottom: 12px;
 }
+
+/* 개별 버튼 */
 .genre-button,
 .gender-button,
 .age-button {
-  background: #dce5f5;
+  background: var(--btn-bg);
   border: none;
   border-radius: 25px;
   padding: 10px 20px;
   cursor: pointer;
-  transition: background 0.3s, color 0.3s;
   font-size: 14px;
-  color: #2C3E50;
+  color: var(--btn-text);
+  transition: background 0.3s, color 0.3s;
 }
+
+/* 선택된 버튼 */
 .selected {
-  background: #2C3E50;
-  color: white;
+  background: var(--selected-bg);
+  color: var(--selected-text);
   font-weight: bold;
 }
-button[type="submit"] {
-  background: var(--btn-bg, #4A90E2);
-  color: var(--btn-text, white);
-  padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background 0.3s;
-  display: block;
-  margin: 0 auto;
-}
-button[type="submit"]:hover {
-  background: #357ABD;
-}
-#profile-display {
-  background: var(--card-bg, #ffffff);
-  padding: 20px;
-  margin-top: 20px;
-  border: 1px solid #ddd;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  max-width: 600px;
-  margin: 20px auto;
-  text-align: center;
-}
+
+/* 상단 고정 버튼 */
 .fixed-btn {
   position: absolute;
   top: 20px;
   padding: 10px 20px;
-  border: none;
   border-radius: 20px;
   font-size: 14px;
+  border: none;
+  background: var(--btn-bg);
+  color: var(--btn-text);
   cursor: pointer;
-}
-#return-home {
-  left: 20px;
-  background: #dce5f5;
-  color: #2C3E50;
-}
-#edit-profile {
-  right: 140px;
-  background: #dce5f5;
-  color: #2C3E50;
-}
-#theme-toggle {
-  right: 20px;
-  background: #4A90E2;
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  transition: opacity 0.3s;
 }
 .fixed-btn:hover {
-  opacity: 0.9;
+  opacity: 0.85;
+}
+#return-home { left: 20px; }
+#theme-toggle { right: 20px; }
+
+/* 추천 영화 영역 */
+.user-recommend {
+  background-color: var(--card-bg); /* 여기 수정됨 */
+  padding: 30px;
+  margin: 60px auto;
+  border-radius: 20px;
+  max-width: 800px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.user-recommend h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: var(--title-color);
+}
+
+#user-recommend-content {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+#user-recommend-content img {
+  width: 150px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
