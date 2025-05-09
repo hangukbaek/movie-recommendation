@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>오늘의 영화 추천</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cafe24+Ssurround&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="weeklyrank.js"></script>
+  <script defer src="dailyrank.js"></script>
+</head>
+<body>
+  <header>
+    <h1>🎬 오늘의 영화 추천</h1>
+    <div class="search-bar">
+      <input
+        type="text"
+        id="search-input"
+        placeholder="영화 제목을 검색하세요"
+        oninput="renderSearchHistory()"
+        onkeydown="handleEnterKey(event)" />
+      <button id="search-button">🔍</button>
+      <div id="search-history" class="search-history" style="display: none;"></div>
+    </div>
+    <button class="btn-login">로그인 / 회원가입</button>
+  </header>
+
+  <div class="genre-buttons">
+    <button class="active">액션</button>
+    <button>코미디</button>
+    <button>SF</button>
+    <button>공포</button>
+    <button>스릴러</button>
+    <button>로맨스</button>
+    <button>스포츠</button>
+    <button>애니메이션</button>
+    <button>다큐멘터리</button>
+    <button>판타지</button>
+  </div>
+
+  <div class="container" id="genre-movie-container" style="margin-top: 20px;"></div>
+
+  <div class="container">
+    <div class="list-box">
+      <div class="section-title">(일간) 박스오피스 순위</div>
+      <ul id="boxoffice-list" class="boxoffice-cards"></ol>
+    </div>
+
+    <section id="hot-movie-section">
+      <h2> 이 주의 hot 랭킹(영화) </h2>
+      <div class="slider-container">
+        <div id="hot-movie-list-wrapper">
+          <div id="slider-viewport">
+            <div id="hot-movie-list"></div>
+          </div>      
+          <button id="slide-left" class="slide-button" aria-label="이전">❮</button>
+          <button id="slide-right" class="slide-button" aria-label="다음">❯</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="card recommendation" style="margin-top: 20px;">
+    <div class="section-title"><span id="user-name">홍길동</span>님을 위한 추천 영화</div>
+      <div id="user-recommendation"></div>
+    </div>
+  </div>
+
+  <div class="card hot-actor" style="margin-top: 20px;">
+    <div class="section-title">이주의 Hot 랭킹 (배우)</div>
+  </div>
+</body>
+</html>
