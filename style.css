@@ -8,6 +8,15 @@
   --card-bg: #ffffff;
 }
 
+[data-theme="dark"] {
+  --bg-color: #1e1e1e;
+  --header-color: #2c3e50;
+  --accent-blue: #5dade2;
+  --hot-pink: #e2556d;
+  --text-main: #f1f1f1;
+  --card-bg: #2c2c2c;
+}
+
 body {
   margin: 0;
   font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
@@ -23,13 +32,13 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; /* 👉 wrap 추가 */
-  gap: 10px; /* 👉 요소 간 간격 */
+  flex-wrap: wrap; /* 요소 줄바꿈 허용 */
+  gap: 10px; /* 요소 간 간격 */
 }
 
 header .header-left {
   flex: 1;
-  min-width: 200px; /* 👉 최소 너비 지정 */
+  min-width: 200px;
 }
 
 header .header-center {
@@ -79,6 +88,11 @@ header .header-right {
   position: relative;
 }
 
+[data-theme="dark"] .search-bar {
+  background-color: #333;
+  border-color: #555;
+}
+
 .search-bar input {
   flex: 1;
   border: none;
@@ -120,7 +134,7 @@ header h1 {
   font-family: 'Cafe24 Ssurround', sans-serif;
 }
 
-/* ✅ 장르 버튼 */
+/* 장르 버튼 */
 .genre-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -134,10 +148,11 @@ header h1 {
   padding: 10px 0;
   border: none;
   border-radius: 20px;
-  background-color: #3498DB;
+  background-color: var(--accent-blue);
   color: white;
   cursor: pointer;
   transition: 0.3s;
+  text-align: center;
   min-width: 100px;
 }
 
@@ -146,242 +161,133 @@ header h1 {
 }
 
 .genre-buttons button.active {
-  background-color: #2C3E50;
+  background-color: var(--header-color);
   color: #fff;
 }
 
+/* 반응형: 창이 좁을 때 장르 버튼 5개씩 두 줄로 */
+@media (max-width: 768px) {
+  .genre-buttons button {
+    flex: 1 1 18%; /* 약 5개씩 한 줄 배치 */
+    min-width: auto;
+    max-width: 18%;
+  }
+}
+
 .container {
-  display: flex;
-  gap: 24px;
-  align-items: stretch;
-  max-width: 2000px;     /* ✅ 화면 최대 너비 제한 */
-  margin: 0 auto;         /* ✅ 가운데 정렬 */
-  padding: 20px;         /* ✅ 내부 여백 */
-  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  padding: 0 20px 20px;
+  align-items: start;
+  color: var(--text-main);
 }
 
-/* ✅ 카드 및 리스트 공통 스타일 */
-.card,
-.list-box {
-  width: 35%;       /* 너비는 자유롭게 */
-  display: flex;
-  flex-direction: column;
-  background: white;
+.card, .list-box {
+  background-color: var(--card-bg);
   padding: 20px;
+  border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  border-radius: 12px;
+  color: var(--text-main);
 }
 
-.movie-card {
-  width: 200px;
-  flex: 0 0 auto;
-  background: #f5f5f5;
-  border-radius: 12px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  box-sizing: border-box;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 300px;         /* ✅ 고정 높이로 조정 */
-  overflow: hidden;
-}
-
-.movie-card img {
-  width: 100%;
-  height: 240px;         /* ✅ 포스터 비율 유지 */
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.movie-card h4 {
-  margin: 8px 0 0;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.movie-card p {
-  display: none;  /* ✅ 텍스트 정보 최소화 시 숨김 처리 가능 */
-}
-
-.card.hot-movie {
-  width: 65%;
-  min-width: 660px;
-}
-
-.card img,
-.list-box img {
+.card img, .list-box img {
   width: 100%;
   border-radius: 12px;
+}
+
+.list-box ol {
+  padding-left: 20px;
 }
 
 .section-title {
   font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 16px;
-  color: #2C3E50;
+  margin-bottom: 10px;
+  color: var(--header-color);
 }
 
-#boxoffice-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+[data-theme="dark"] .section-title {
+  color: #f0f0f0;
 }
 
-.boxoffice-item {
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
-  display: flex;
-  align-items: center;
-  gap: 8px; /* ✅ 순위와 제목 사이 여백 */
+.list-box,
+.card.hot-movie,
+.card.recommendation,
+.card.hot-actor {
+  min-height: 300px;
+  height: 300px;
 }
 
-.boxoffice-item .rank {
-  color: #2C3E50;
-  font-weight: bold;
-  min-width: 28px;
-  text-align: right;
-}
-
-.boxoffice-item .title::before {
-  margin-right: 6px;
-}
-
-/* 슬라이더 전체 래퍼 */
-#hot-movie-section {
-  width: 75%;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+.card.hot-actor {
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
-  position: relative;
+  justify-content: space-between;
 }
 
-/* 슬라이더 뷰포트: 카드 3개만 보이도록 고정 */
-#slider-viewport {
-  width: 660px;               /* 200px x 3 + 20px x 2 (gap 2개) */
-  overflow: hidden;
-  margin: 0 auto;
-}
-
-/* 전체 카드 리스트 (수평 스크롤 영역) */
-#hot-movie-list {
+.container.bottom-section {
   display: flex;
   gap: 20px;
-  transition: transform 0.4s ease-in-out;
-  will-change: transform;
+  padding: 0 20px 20px;
 }
 
-/* 개별 카드 크기 */
-.movie-card {
-  flex: 0 0 auto;
-  width: 200px;
-  background: #f5f5f5;
-  border-radius: 12px;
-  padding: 12px;
-  border: 1px solid #ddd;
-  box-sizing: border-box;
-  text-align: center;
+.container.bottom-section .card {
+  flex: 1;
 }
 
-/* 슬라이드 좌우 버튼 */
 .slide-button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 2;
-  background: white;
-  border: 1px solid #ccc;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  background-color: var(--hot-pink);
+  color: white;
+  border: none;
+  cursor: pointer;
   font-size: 24px;
-  font-weight: bold;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
 }
 
-/* 좌우 위치만 조정 */
-#slide-left {
+.slide-button:hover {
+  background-color: #e2556d;
+}
+
+.slide-button.left {
   left: 16px;
 }
 
-#slide-right {
+.slide-button.right {
   right: 16px;
 }
 
-.hidden {
-  display: none !important;
-}
-
-.fade-in {
-  animation: fadeIn 0.5s ease forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.genre-section {
+.slider-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 300px;
   display: flex;
-  flex-direction: column;
-  gap: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 48px;
+  box-sizing: border-box;
 }
 
-.genre-block {
+.slider-content {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  transition: transform 0.4s ease-in-out;
+  gap: 20px;
   width: 100%;
 }
 
-.genre-block h3 {
-  margin: 0;
-  font-size: 18px;
-  color: #2C3E50;
-}
-
-/* 슬라이드 스타일 */
-.genre-slider {
+.slider-item {
+  flex: 0 0 100%;
   display: flex;
-  overflow-x: auto;
-  gap: 16px;
-  padding: 10px 0;
-  scroll-snap-type: x mandatory;
-
-  /* ✅ 가운데 정렬 추가 */
   justify-content: center;
 }
 
-.genre-slider::-webkit-scrollbar {
-  height: 8px;
-}
-
-.genre-slider::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 4px;
-}
-
-.genre-slider .movie-card {
-  flex: 0 0 auto;
-  width: 200px;
-  scroll-snap-align: start;
-}
