@@ -4,45 +4,12 @@
   <meta charset="UTF-8" />
   <title>마이페이지</title>
   <link rel="stylesheet" href="mypage.css" />
-  <link rel="stylesheet" href="style.css" /> <!-- ✅ header용 css 추가 -->
-  <script>
-    // ✅ header.html 동적 삽입
-    document.addEventListener("DOMContentLoaded", () => {
-      fetch("/header.html")
-        .then(res => res.text())
-        .then(html => {
-          const container = document.createElement("div");
-          container.innerHTML = html;
-          document.body.insertBefore(container, document.body.firstChild);
-
-          // ✅ 로그인 버튼 동작 추가
-          const loginBtn = document.getElementById("googleLoginBtn");
-          if (loginBtn) {
-            loginBtn.addEventListener("click", () => {
-              const currentPath = window.location.pathname + window.location.search;
-              window.location.href = `/auth/google?redirect=${encodeURIComponent(currentPath)}`;
-            });
-          }
-
-          const urlParams = new URLSearchParams(window.location.search);
-          const token = urlParams.get("token");
-          if (token) {
-            localStorage.setItem("token", token);
-            console.log("✅ 로그인 성공: JWT가 저장되었습니다.");
-            urlParams.delete("token");
-            const newUrl = window.location.pathname + (urlParams.toString() ? "?" + urlParams.toString() : "");
-            history.replaceState({}, "", newUrl);
-          }
-        });
-    });
-  </script>
-  <script src="mypage.js" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- ✅ header는 위에서 동적으로 삽입됨 -->
-
   <!-- 상단 버튼 -->
   <button id="return-home" class="fixed-btn" onclick="window.location.href='/'">메인으로</button>
+  <button id="theme-toggle" class="fixed-btn">🌞 테마 전환</button>
 
   <h1 id="page-title">마이페이지</h1>
 
@@ -62,7 +29,7 @@
       <button type="button" class="genre-button">로맨스</button>
       <button type="button" class="genre-button">공포</button>
       <button type="button" class="genre-button">스릴러</button>
-      <button type="button" class="genre-button">음악악</button>
+      <button type="button" class="genre-button">음악</button>
       <button type="button" class="genre-button">애니메이션</button>
       <button type="button" class="genre-button">다큐멘터리</button>
       <button type="button" class="genre-button">판타지</button>
@@ -79,12 +46,42 @@
       <button type="button" class="age-button">60대 이상</button>
     </div>
     <input type="hidden" id="input-age" />
+
+    <button type="submit">저장</button>
   </form>
 
-  <!-- 사용자님을 위한 추천 영화 컨테이너 -->
-  <div class="user-recommend">
-    <h2>사용자님을 위한 추천 영화</h2>
-    <div id="user-recommend-content"></div>
+  <div id="profile-display">
+    <h2>내 정보</h2>
+    <p id="display-name"></p>
+    <p id="display-gender"></p>
+    <p id="display-genre"></p>
+    <p id="display-age"></p>
   </div>
+
+  <!-- 🔽 선호 장르 기반 추천 영화 영역 -->
+  <div id="genre-recommendations">
+    <h2>선호 장르 기반 추천 영화</h2>
+    <!-- JavaScript에서 .recommend-block 들이 삽입됨 -->
+    <!-- 각 블록은 아래와 같은 구조로 생성됨 -->
+    <!--
+    <div class="recommend-block">
+      <h3>액션</h3>
+      <div class="recommend-slider-wrapper">
+        <div class="recommend-slider">
+          <div class="recommend-card">...</div>
+          <div class="recommend-card">...</div>
+          <div class="recommend-card">...</div>
+        </div>
+      </div>
+      <div class="recommend-nav">
+        <button>&#10094;</button>
+        <button>&#10095;</button>
+      </div>
+    </div>
+    -->
+  </div>
+
+  <script src="mypage.js"></script>
 </body>
 </html>
+
