@@ -4,20 +4,16 @@
   <meta charset="UTF-8" />
   <title>마이페이지</title>
   <link rel="stylesheet" href="mypage.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- 상단 버튼 -->
   <button id="return-home" class="fixed-btn" onclick="window.location.href='/'">메인으로</button>
-  <!-- <button id="edit-profile" class="fixed-btn">프로필 수정</button> -->
   <button id="theme-toggle" class="fixed-btn">🌞 테마 전환</button>
 
   <h1 id="page-title">마이페이지</h1>
 
   <form id="profile-form">
-    <!-- <label>이름:
-      <input type="text" id="input-name" />
-    </label> -->
-
     <label>성별:</label>
     <div class="gender-buttons-wrapper">
       <button type="button" class="gender-button" data-value="남성">남성</button>
@@ -60,6 +56,29 @@
     <p id="display-gender"></p>
     <p id="display-genre"></p>
     <p id="display-age"></p>
+  </div>
+
+  <!-- 🔽 선호 장르 기반 추천 영화 영역 -->
+  <div id="genre-recommendations">
+    <h2>선호 장르 기반 추천 영화</h2>
+    <!-- JavaScript에서 .recommend-block 들이 삽입됨 -->
+    <!-- 각 블록은 아래와 같은 구조로 생성됨 -->
+    <!--
+    <div class="recommend-block">
+      <h3>액션</h3>
+      <div class="recommend-slider-wrapper">
+        <div class="recommend-slider">
+          <div class="recommend-card">...</div>
+          <div class="recommend-card">...</div>
+          <div class="recommend-card">...</div>
+        </div>
+      </div>
+      <div class="recommend-nav">
+        <button>&#10094;</button>
+        <button>&#10095;</button>
+      </div>
+    </div>
+    -->
   </div>
 
   <script src="mypage.js"></script>

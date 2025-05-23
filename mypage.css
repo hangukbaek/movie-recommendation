@@ -118,3 +118,92 @@
   .fixed-btn:hover {
     opacity: 0.9;
   }
+  #genre-recommendations {
+    background: var(--card-bg, #ffffff);
+    padding: 20px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+  }
+  /* 슬라이드 전체 블록 */
+.recommend-block {
+  margin-bottom: 40px;
+}
+
+/* 슬라이드 제목 */
+.recommend-block h3 {
+  margin-bottom: 16px;
+  font-size: 24px;
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-weight: 700;
+  color: var(--title-color, #333333);
+}
+
+/* 슬라이더 뷰포트 */
+.recommend-slider-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* 슬라이더 트랙 */
+.recommend-slider {
+  display: flex;
+  transition: transform 0.5s ease;
+  will-change: transform;
+}
+
+/* 슬라이더 내부 카드 (한 줄에 3개씩 보이게 설정) */
+.recommend-card {
+  flex: 0 0 33.3333%;  /* 3개씩 보이게 설정 */
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+/* 카드 안의 이미지 및 제목 */
+.recommend-card img {
+  width: 100%;
+  border-radius: 10px;
+  font-family: Georgia, serif;
+  font-weight: bold;
+  color: var(--title-color, #333333);
+  object-fit: cover;
+}
+.recommend-card p {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  color: var(--text-color, #333);
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* 네비게이션 버튼 */
+.recommend-nav {
+  margin-top: 10px;
+  text-align: center;
+}
+.recommend-nav button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background: #eee;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 5px;
+}
+.recommend-nav button:hover {
+  background: #ccc;
+}
+.no-genre-msg {
+  font-size: 16px;
+  color: gray;
+  margin-top: 20px;
+  text-align: center;
+  font-family: Georgia, serif;
+  font-weight: bold;
+}
