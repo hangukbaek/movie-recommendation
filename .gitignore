@@ -1,0 +1,9 @@
+# node_modules 폴더 무시
+# node_modules/
+
+# 환경 변수 파일 무시
+.env
+
+NotEffectAPI.js
+개발현황.txt
+개발일지.txt
