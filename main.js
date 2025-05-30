@@ -1,11 +1,32 @@
-// ✅ 장르 버튼 클릭 시 영화 목록 API 호출 및 UI 갱신
-// ✅ 초기 로딩 시 '액션' 자동 호출
-// ✅ 다크 모드 유지 설정
-// ✅ 핫랭킹 슬라이드 기능
-// ✅ 사용자 이름 기반 추천 영화 출력
-// ✅ 로그인 상태 표시, 로그아웃/마이페이지 버튼 활성화
-
 document.addEventListener("DOMContentLoaded", () => {
+      // ✅ header 삽입 후에 로그인/로그아웃/마이페이지 등 모든 기능 바인딩
+      initializeAfterHeaderLoad();
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // 검색 버튼 클릭 시 결과 페이지로 이동
+      const searchButton = document.getElementById('search-button');
+      const searchInput = document.getElementById('search-input');
+      
+      searchButton.addEventListener("click", () => {
+        const query = searchInput.value;
+        if (query) {
+          window.location.href = `searchResult.html?query=${encodeURIComponent(query)}`;
+        }
+      });
+
+      // 엔터키로 검색 시에도 결과 페이지로 이동
+      searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const query = searchInput.value;
+          if (query) {
+            window.location.href = `searchResult.html?query=${encodeURIComponent(query)}`;
+          }
+        }
+      });
+    });
+
+function initializeAfterHeaderLoad() {
   // ✅ 다크 모드 적용 유지
   const savedTheme = localStorage.getItem("theme");
   if (savedTheme === "dark") {
@@ -38,6 +59,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
+  loginBtn.addEventListener("click", () => {
+    const currentPath = window.location.pathname + window.location.search;
+    window.location.href = `/auth/google?redirect=${encodeURIComponent(currentPath)}`;
+  });
+
   logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
@@ -52,42 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
   myPageBtn.addEventListener("click", () => {
     window.location.href = "/mypage.html";
   });
-
-  // ✅ 사용자 이름 불러와서 UI에 표시 + 추천 API 호출
-  const userName = localStorage.getItem("userName") || "게스트";
-  const nameEl = document.getElementById("user-name");
-  if (nameEl) {
-    nameEl.textContent = userName;
-  }
-
-  fetch(`https://api.example.com/recommendation?user=${encodeURIComponent(userName)}`)
-    .then(res => res.json())
-    .then(recommendations => {
-      const container = document.getElementById("user-recommendation");
-      if (!recommendations.length) {
-        container.innerHTML = "<p>추천 영화를 찾을 수 없습니다.</p>";
-        return;
-      }
-      container.innerHTML = "";
-      recommendations.forEach(movie => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.style.cursor = "pointer";
-        card.innerHTML = `
-          <img src="${movie.poster}" alt="${movie.title}" />
-          <p style="text-align:center; margin-top:10px;">${movie.title}</p>
-        `;
-        card.addEventListener("click", () => {
-          window.location.href = `detail.html?title=${encodeURIComponent(movie.title)}`;
-        });
-        container.appendChild(card);
-      });
-    })
-    .catch(err => {
-      const container = document.getElementById("user-recommendation");
-      container.innerHTML = "<p>추천 영화를 불러오는 데 실패했습니다 😥</p>";
-      console.error("추천 영화 API 실패:", err);
-    });
 
   // ✅ 장르 버튼 클릭 시 API 호출 및 active 처리
   const genreButtons = document.querySelectorAll(".genre-buttons button");
@@ -118,11 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // ✅ 초기 로딩 시 첫 번째 장르 자동 실행
   if (genreButtons.length > 0) {
     genreButtons[0].click();
   }
-});
+}
 
 // ✅ 슬라이드 버튼 제어 함수 (핫랭킹용)
 let hotMovieIndex = 0;
@@ -156,4 +145,129 @@ function toggleTheme() {
     document.documentElement.setAttribute("data-theme", "dark");
     localStorage.setItem("theme", "dark");
   }
+}
+
+//검색바 기능 구현
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // 로그인 버튼 동작
+      const loginBtn = document.getElementById("googleLoginBtn");
+      if (loginBtn) {
+        loginBtn.addEventListener("click", () => {
+          const currentPath = window.location.pathname + window.location.search;
+          window.location.href = `/auth/google?redirect=${encodeURIComponent(currentPath)}`;
+        });
+      }
+
+      // 로그인 처리
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get("token");
+
+      if (token) {
+  localStorage.setItem("token", token);
+  console.log("✅ 로그인 성공: JWT가 저장되었습니다.");
+  urlParams.delete("token");
+  const newUrl = window.location.pathname + (urlParams.toString() ? "?" + urlParams.toString() : "");
+  history.replaceState({}, "", newUrl);
+
+  // ✅ 바로 로그인 상태 UI 반영
+  initializeAfterHeaderLoad();
+}
+
+
+      // 검색 기록 기능
+      const searchInput = document.getElementById("search-input");
+      const searchButton = document.getElementById("search-button");
+      const searchHistory = document.getElementById("search-history");
+
+      // 검색 기록 표시 함수
+      function displaySearchHistory(query) {
+        const historyItem = document.createElement("div");
+        historyItem.textContent = query;
+        historyItem.classList.add("search-history-item");
+
+        // X 버튼 추가
+        const deleteButton = document.createElement("span");
+        deleteButton.textContent = "❌";
+        deleteButton.classList.add("delete-button");
+        deleteButton.addEventListener("click", () => {
+          historyItem.remove();
+        });
+
+        historyItem.appendChild(deleteButton);
+        searchHistory.appendChild(historyItem);
+      }
+
+      searchButton.addEventListener("click", () => {
+        const query = searchInput.value.trim();
+        if (query) {
+          displaySearchHistory(query); // 검색 기록 추가
+          searchMovies(query); // 영화 검색
+        }
+      });
+
+      // Enter 키로 검색 기능 구현
+      searchInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          const query = searchInput.value.trim();
+          if (query) {
+            displaySearchHistory(query); // 검색 기록 추가
+            searchMovies(query); // 영화 검색
+          }
+        }
+      });
+
+      // 영화 검색 API 호출 및 새로운 창 열기
+      function searchMovies(query) {
+        window.open(`searchResult.html?query=${encodeURIComponent(query)}`, "_blank");
+      }
+    });
+  
+    // ✅ TMDB API 키 설정 (반드시 자신의 키로 교체)
+const tmdbKey = '999dc9586a0cbbaf8d1f914c3b6bcdff'; // 🔑 본인의 TMDB API 키 입력
+
+// ✅ 영화 검색 결과를 index.html 내부에 표시하는 함수 (새창 X)
+function searchMovies(query) {
+  const resultContainer = document.getElementById("search-result-container");
+  const boxofficeList = document.getElementById("boxoffice-list");
+  const hotSection = document.getElementById("hot-movie-section");
+  const genreContainer = document.getElementById("genre-movie-container");
+
+  // 🔒 기존 콘텐츠를 숨김 처리
+  if (boxofficeList) boxofficeList.parentElement.style.display = "none";
+  if (hotSection) hotSection.style.display = "none";
+  if (genreContainer) genreContainer.style.display = "none";
+
+  // 🔍 검색 결과 영역 초기화 및 보여주기
+  resultContainer.innerHTML = `<p>🔍 '${query}' 검색 중...</p>`;
+  resultContainer.style.display = "block";
+
+  // 🎬 TMDB 영화 검색 API 호출
+  const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${tmdbKey}&query=${encodeURIComponent(query)}&language=ko-KR`;
+
+  fetch(searchUrl)
+    .then(response => response.json())
+    .then(data => {
+      resultContainer.innerHTML = ""; // 결과 비우고 다시 채움
+
+      if (data.results.length > 0) {
+        data.results.forEach(movie => {
+          const movieCard = document.createElement("div");
+          movieCard.className = "movie-card";
+          movieCard.innerHTML = `
+            <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}" />
+            <h3>${movie.title}</h3>
+            <p>개봉: ${movie.release_date?.split('-')[0] || '미상'}</p>
+            <a href="movieDetail.html?id=${movie.id}">자세히 보기</a>
+          `;
+          resultContainer.appendChild(movieCard);
+        });
+      } else {
+        resultContainer.innerHTML = `<p>❌ '${query}'에 대한 결과가 없습니다.</p>`;
+      }
+    })
+    .catch(err => {
+      console.error("❌ 영화 검색 실패:", err);
+      resultContainer.innerHTML = `<p>서버 오류로 검색 결과를 불러올 수 없습니다.</p>`;
+    });
 }
