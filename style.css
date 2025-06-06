@@ -32,13 +32,13 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; /* 👉 wrap 추가 */
-  gap: 10px; /* 👉 요소 간 간격 */
+  flex-wrap: wrap; /* 요소 줄바꿈 허용 */
+  gap: 10px; /* 요소 간 간격 */
 }
 
 header .header-left {
   flex: 1;
-  min-width: 200px; /* 👉 최소 너비 지정 */
+  min-width: 200px;
 }
 
 header .header-center {
@@ -126,7 +126,7 @@ header .header-right {
 .login-btn:hover, .theme-toggle-btn:hover {
   background-color: #2d87c9;
 }
-
+/*오늘의 영화추천 */
 header h1 {
   font-size: clamp(18px, 2vw, 500px);
   color: violet;
@@ -134,6 +134,7 @@ header h1 {
   font-family: 'Cafe24 Ssurround', sans-serif;
 }
 
+/* 장르 버튼 */
 .genre-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -162,6 +163,15 @@ header h1 {
 .genre-buttons button.active {
   background-color: var(--header-color);
   color: #fff;
+}
+
+/* 반응형: 창이 좁을 때 장르 버튼 5개씩 두 줄로 */
+@media (max-width: 768px) {
+  .genre-buttons button {
+    flex: 1 1 18%; /* 약 5개씩 한 줄 배치 */
+    min-width: auto;
+    max-width: 18%;
+  }
 }
 
 .container {

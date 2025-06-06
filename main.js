@@ -121,3 +121,30 @@ logoutBtn.addEventListener("click", () => {
 myPageBtn.addEventListener("click", () => {
   window.location.href = "/mypage.html";
 });
+
+//다크모드 전환 함수
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute("data-theme");
+  if (currentTheme === "dark") {
+    document.documentElement.removeAttribute("data-theme");
+    localStorage.setItem("theme", "light");
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+    localStorage.setItem("theme", "dark");
+  }
+}
+
+// 테마 전환
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  const root = document.documentElement;
+  const isDark = root.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    root.removeAttribute('data-theme');
+    localStorage.removeItem('theme');
+    document.getElementById('theme-toggle').textContent = '🌞 테마 전환';
+  } else {
+    root.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+    document.getElementById('theme-toggle').textContent = '🌙 테마 전환';
+  }
+});
