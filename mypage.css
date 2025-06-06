@@ -118,6 +118,9 @@
   .fixed-btn:hover {
     opacity: 0.9;
   }
+<<<<<<< HEAD
+  
+=======
   #genre-recommendations {
     background: var(--card-bg, #ffffff);
     padding: 20px;
@@ -207,3 +210,4 @@
   font-family: Georgia, serif;
   font-weight: bold;
 }
+>>>>>>> 0c40b18eef03b079a777959f2013e0b954d34471
