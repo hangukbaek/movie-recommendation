@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
   <title>마이페이지</title>
   <link rel="stylesheet" href="mypage.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+KR:wght@400;700&display=swap"
+    rel="stylesheet">
 </head>
+
 <body>
   <!-- 상단 버튼 -->
   <button id="return-home" class="fixed-btn" onclick="window.location.href='/'">메인으로</button>
@@ -80,8 +84,15 @@
     </div>
     -->
   </div>
+  
+    <div id="movie-popup" class="movie-popup">
+      <div class="popup-content">
+        <button id="popup-close" class="popup-close">✖</button>
+        <div id="popup-body"></div>
+      </div>
+    </div>
 
-  <script src="mypage.js"></script>
+    <script src="mypage.js"></script>
 </body>
-</html>
 
+</html>

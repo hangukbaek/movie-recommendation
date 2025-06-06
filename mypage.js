@@ -156,9 +156,9 @@ async function loadGenreRecommendations(genres) {
         const card = document.createElement('div');
         card.className = 'recommend-card';
         card.innerHTML = `
-          <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}" onclick="location.href='search.html?movieId=${movie.id}'"/>
-          <p>${movie.title}</p>
-        `;
+    <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}" onclick="openMoviePopup(${movie.id})" />
+    <p>${movie.title}</p>
+  `;
         slider.appendChild(card);
       });
     } catch (err) {
@@ -200,3 +200,47 @@ function moveSlide(genre, direction) {
     isTransitioning[genre] = false;
   }, 500);
 }
+
+function openMoviePopup(movieId) {
+  const popup = document.getElementById("movie-popup");
+  const popupBody = document.getElementById("popup-body");
+  popup.style.display = "flex";
+  popupBody.innerHTML = "<p>로딩 중...</p>";
+
+  const apiKey = "999dc9586a0cbbaf8d1f914c3b6bcdff";
+
+ 
+  Promise.all([
+    fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=ko-KR`).then(res => res.json()),
+    fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${apiKey}&language=ko-KR`).then(res => res.json())
+  ])
+  .then(([movie, credits]) => {
+    const genres = movie.genres.map(g => g.name).join(", ");
+    const Actors = credits.cast.slice(0, 5).map(actor => actor.name).join(", ");
+
+    popupBody.innerHTML = `
+      <h2>${movie.title}</h2>
+      <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}" />
+      <div style="overflow: hidden">
+        <p><strong>개봉일:</strong> ${movie.release_date}</p>
+        <p><strong>평점:</strong> ${movie.vote_average}</p>
+        <p><strong>장르:</strong> ${genres}</p>
+        <p><strong>주연 배우:</strong> ${Actors}</p>
+        <p><strong>줄거리:</strong><br/>${movie.overview || '줄거리가 제공되지 않았습니다.'}</p>
+      </div>
+    `;
+  })
+  .catch(err => {
+    popupBody.innerHTML = "<p>영화 정보를 불러오지 못했습니다.</p>";
+    console.error("팝업 로딩 실패:", err);
+  });
+}
+
+// 팝업 외부 클릭 또는 닫기 버튼 처리
+window.addEventListener("click", (e) => {
+  const popup = document.getElementById("movie-popup");
+  if (e.target === popup) popup.style.display = "none";
+});
+document.getElementById("popup-close").addEventListener("click", () => {
+  document.getElementById("movie-popup").style.display = "none";
+});

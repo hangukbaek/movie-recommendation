@@ -110,6 +110,7 @@
           window.location.pathname +
           (urlParams.toString() ? "?" + urlParams.toString() : "");
         history.replaceState({}, "", newUrl);
+        location.reload();
       }
     });
   </script>
