@@ -9,8 +9,8 @@
   <script defer src="main.js"></script>
   <script defer src="weeklyRank.js"></script>
   <script defer src="dailyRank.js"></script>
-  <script defer src="server.js"></script>
-  <script defer src="genre.js"></script> <!-- ✅ 추가 -->
+  <script defer src="genre.js"></script>
+  <script defer src="searchResult.js"></script>
 </head>
 <body>
   <header>
@@ -46,6 +46,9 @@
     <button>다큐멘터리</button>
     <button>판타지</button>
   </div>
+
+  <!-- 검색 결과를 표시할 컨테이너 -->
+  <div id="search-result-container" class="container" style="display:none; margin-top: 20px;"></div>
 
   <!-- ✅ 슬라이드 컨테이너 (초기 숨김) -->
   <div class="container hidden" id="genre-movie-container" style="margin-top: 20px;"></div>

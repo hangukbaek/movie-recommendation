@@ -149,7 +149,6 @@ async function loadGenreRecommendations(genres) {
 
       const slider = document.getElementById(`slider-${genre}`);
       const visibleCount = 3;
-
       const movies = results.slice(0, 12);
       const allMovies = movies.concat(movies.slice(0, visibleCount));
 
@@ -157,7 +156,7 @@ async function loadGenreRecommendations(genres) {
         const card = document.createElement('div');
         card.className = 'recommend-card';
         card.innerHTML = `
-          <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}" />
+          <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}" onclick="location.href='search.html?movieId=${movie.id}'"/>
           <p>${movie.title}</p>
         `;
         slider.appendChild(card);

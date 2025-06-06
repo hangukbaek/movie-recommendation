@@ -1,6 +1,6 @@
 const container = document.getElementById('hot-movie-list');
 
-const tmdbKey = '999dc9586a0cbbaf8d1f914c3b6bcdff'; // 🔑 본인의 TMDB API 키 입력
+const tmdbKey = '999dc9586a0cbbaf8d1f914c3b6bcdff'; 
 
 const today = new Date();
 today.setDate(today.getDate() - 7);
@@ -75,7 +75,7 @@ async function getPosterFromTMDB(title) {
   return null;
 }
 
-// 슬라이드 버튼
+
 function updateSlider() {
   container.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
 }

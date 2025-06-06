@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>검색 결과</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="searchResultstyle.css" />
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <h1>🎬 검색 결과</h1>
+    </div>
+  </header>
+
+  <!-- 검색어 표시 -->
+  <div class="search-info">
+    <p>검색한 영화: <span id="search-query"></span></p>
+  </div>
+
+  <!-- 영화 목록을 표시할 컨테이너 -->
+  <div id="movie-list-container" class="container"></div>
+
+  <!-- 뒤로가기 버튼 -->
+  <button id="back-button" onclick="goBack()">🔙 뒤로 가기</button>
+
+  <script src="searchResult.js"></script> <!-- 이 파일에서 API 호출을 처리합니다 -->
+</body>
+</html>
