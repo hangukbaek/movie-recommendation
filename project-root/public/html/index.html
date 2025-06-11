@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>오늘의 영화 추천</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cafe24+Ssurround&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="main.js"></script>
+  <script defer src="genre.js"></script>
+  <script defer src="weeklyrank.js"></script>
+  <script defer src="dailyrank.js"></script>
+  <script defer src="search.js"></script>
+</head>
+<body>
+  <header>
+      <div class="header-left">
+  <h1><a href="/" style="color: violet; text-decoration: none;">🎬 오늘의 영화 추천</a></h1>
+</div>
+
+    </div>
+
+    <div class="header-center">
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="영화 제목을 검색하세요" />
+        <button id="search-button">🔍</button>
+        <div id="search-history" class="search-history" style="display: none;"></div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <span id="login-status" style="color: white; margin-right: 10px;"></span>
+      <button class="btn-login" id="googleLoginBtn">로그인</button>
+      <button class="btn-logout" id="logoutBtn" style="display:none;">로그아웃</button>
+      <button class="btn-mypage" id="myPageBtn" style="display:none;">마이페이지</button>
+      <button class="btn-theme btn-login" id="theme-toggle">🌞 테마 전환</button>
+    </div>
+  </header>
+
+  <div class="genre-buttons">
+    <button>액션</button>
+    <button>코미디</button>
+    <button>SF</button>
+    <button>공포</button>
+    <button>스릴러</button>
+    <button>로맨스</button>
+    <button>음악</button>
+    <button>애니메이션</button>
+    <button>다큐멘터리</button>
+    <button>판타지</button>
+  </div>
+
+  <!-- 검색 결과를 표시할 컨테이너 -->
+  <div id="search-result-container" class="container" style="display:none; margin-top: 20px;"></div>
+
+  <!-- 슬라이드 컨테이너 (초기 숨김) -->
+  <div class="container hidden" id="genre-movie-container" style="margin-top: 20px;"></div>
+
+  <div class="container">
+    <div class="list-box">
+      <div class="section-title">(일간) 박스오피스 순위</div>
+      <ul id="boxoffice-list" class="boxoffice-cards"></ul>
+    </div>
+
+    <section id="hot-movie-section">
+      <h2> 이 주의 hot 랭킹(영화) </h2>
+      <div class="slider-container">
+        <div id="hot-movie-list-wrapper">
+          <div id="slider-viewport">
+            <div id="hot-movie-list"></div>
+          </div>      
+          <button id="slide-left" class="slide-button" aria-label="이전">❮</button>
+          <button id="slide-right" class="slide-button" aria-label="다음">❯</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

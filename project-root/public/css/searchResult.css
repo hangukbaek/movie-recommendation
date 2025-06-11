@@ -1,0 +1,208 @@
+/* 📍 검색어 표시 스타일 */
+.search-info {
+  margin: 30px auto 20px;
+  padding: 15px 25px;
+  max-width: 600px;
+  background-color: #f8f9fa;
+  border-left: 6px solid #007bff;
+  border-radius: 8px;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-info p {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 500;
+}
+
+.search-info span {
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* 🎨 테마 다크모드 변수 설정 */
+:root[data-theme="dark"] {
+  --bg-color: #1e1e1e;
+  --text-color: #f0f0f0;
+  --card-bg: #2a2a2a;
+  --btn-bg: #3a3f4b;
+  --btn-text: #ffffff;
+  --selected-bg: #4a90e2;
+  --selected-text: #ffffff;
+  --title-color: #ffffff;
+  --recommend-bg: #2d2d2d;
+}
+
+body {
+  background-color: var(--bg-color, #f4f4f4);
+  color: var(--text-color, #000);
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #2f4250;
+  padding: 20px;
+  text-align: center;
+  color: white;
+}
+
+.header-left h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #ff99cc;
+}
+
+/* 고정 버튼 */
+#back-button, #theme-toggle {
+  position: fixed;
+  top: 20px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* 좌측 상단 다크모드 버튼 */
+#back-button {
+  left: 20px;  /* 좌측 상단 */
+}
+
+/* 우측 상단 뒤로가기 버튼 */
+#theme-toggle {
+  right: 20px;  /* 우측 상단 */
+}
+
+/* 버튼 hover 시 색상 변경 */
+#back-button:hover,
+#theme-toggle:hover {
+  background-color: #505866;
+}
+
+/* 전체 컨테이너 */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 40px 10%;
+  box-sizing: border-box;
+}
+
+/* 카드 */
+.movie-card {
+  width: 100%;
+  max-width: 800px;
+  background-color: var(--card-bg, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 내부 정렬 */
+.movie-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* 포스터 영역 */
+.poster-wrapper {
+  flex-shrink: 0;
+}
+
+/* 포스터 이미지 */
+.poster-image {
+  width: 120px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* 영화 정보 */
+.movie-info {
+  flex: 1;
+  padding-top: 4px;
+  text-align: left;
+  font-size: 16px;
+  color: var(--text-color, #222);
+  line-height: 1.6;
+}
+.movie-info h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #222;
+}
+.movie-info p {
+  margin: 6px 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+.movie-info strong {
+  color: #111;
+  font-weight: 600;
+}
+.movie-info a {
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease-in-out;
+}
+.movie-info a:hover {
+  border-bottom: 1px solid #007bff;
+}
+
+/* 다크 모드 스타일 */
+[data-theme="dark"] {
+  background-color: #121212;
+  color: white;
+}
+
+/* 다크 모드에서 movie-card 배경 색상 */
+[data-theme="dark"] .movie-card {
+  background-color: #333;
+  color: white;
+}
+
+/* movie-info 텍스트 색상 수정 */
+[data-theme="dark"] .movie-info {
+  color: white;  /* 다크 모드에서 텍스트 색상을 흰색으로 설정 */
+}
+
+/* 영화 제목 스타일 */
+[data-theme="dark"] .movie-info h3 {
+  color: white;  /* 제목 텍스트 색상 변경 */
+}
+
+/* 개봉연도, 평점, 주연 등의 내용 스타일 */
+[data-theme="dark"] .movie-info p {
+  color: white;  /* 텍스트 색상을 흰색으로 설정 */
+}
+
+/* 텍스트 강조 부분 (strong) */
+[data-theme="dark"] .movie-info strong {
+  color: #ff99cc;  /* 강조된 텍스트 색상을 핑크로 변경 (혹은 다른 색상으로 변경 가능) */
+}
+
+/* 버튼 색상 */
+[data-theme="dark"] .open-modal {
+  background-color: #444;
+  color: white;
+}
+
+#search-title {
+  cursor: pointer;  /* 마우스를 올렸을 때 커서가 손가락 모양으로 바뀌게 설정 */
+}

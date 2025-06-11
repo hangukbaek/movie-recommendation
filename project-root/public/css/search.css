@@ -1,0 +1,94 @@
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+#page-title {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+
+.fixed-btn {
+  position: absolute;
+  top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #4A90E2;
+  color: white;
+}
+
+#return-home {
+  left: 20px;
+}
+
+#theme-toggle {
+  right: 20px;
+}
+
+.movie-detail {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.movie-detail h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.movie-detail p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.movie-detail img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* 고정 버튼 */
+/* 버튼 스타일 */
+#back-button, #theme-toggle {
+  position: fixed;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease-in-out;
+  z-index: 1000; /* 버튼이 다른 요소 위에 표시되도록 */
+}
+
+/* 좌측 상단 다크모드 버튼 */
+#theme-toggle {
+  left: 20px; /* 좌측 상단 */
+  top: 20px; /* 화면 상단 */
+}
+
+/* 우측 상단 뒤로가기 버튼 */
+#back-button {
+  right: 20px; /* 우측 상단 */
+  top: 20px; /* 화면 상단 */
+}
+
+/* 버튼 hover 시 색상 변경 */
+#back-button:hover,
+#theme-toggle:hover {
+  background-color: #505866;
+}
