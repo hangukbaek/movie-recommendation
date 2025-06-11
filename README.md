@@ -28,17 +28,19 @@
 ```plaintext
 📦project-root
  ┣ 📂public
- ┃ ┣ 📜index.html
- ┃ ┣ 📜search.html
- ┃ ┣ 📜searchResearch.html
- ┃ ┣ 📜style.css
- ┃ ┣ 📜searchResearch.css
  ┃ ┗ 📂scripts
  ┃   ┣ 📜main.js
  ┃   ┣ 📜genre.js
  ┃   ┣ 📜dailyrank.js
  ┃   ┣ 📜weeklyrank.js
  ┃   ┗ 📜searchResearch.js
+ ┣ ┗ 📂css
+ ┃    ┣ 📜style.css
+ ┃    ┣ 📜searchResearch.css
+ ┣ ┗ 📂html
+ ┃    ┣ 📜index.html
+ ┃    ┣ 📜search.html
+ ┃    ┣ 📜searchResearch.html
  ┣ 📂server
  ┃ ┗ 📜server.js
  ┣ 📜package.json
