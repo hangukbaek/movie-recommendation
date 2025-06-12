@@ -1,28 +1,26 @@
-<!-- 영화 검색 결과 페이지 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>검색 결과</title>
-
   <!-- 기존 스타일시트 불러오기 -->
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="searchResultstyle.css" />
+  <link rel="stylesheet" href="searchResult.css" />
 </head>
 <body>
-  <!-- 상단 헤더 -->
   <header>
     <div class="header-left">
-      <h1>🎬 검색 결과</h1>
+      <!-- 검색 결과 제목을 클릭하면 새로고침하도록 설정 -->
+      <h1 id="search-title" onclick="window.location.reload();">🎬 검색 결과</h1>
     </div>
   </header>
 
-  <!-- 좌측 상단 다크모드 전환 버튼 -->
-  <button id="theme-toggle" class="fixed-btn">🌞 테마 전환</button>
-
-  <!-- 우측 상단 뒤로가기 버튼 -->
+  <!-- 좌측 상단 뒤로가기 버튼 -->
   <button id="back-button" onclick="goBack()">🔙 뒤로 가기</button>
+
+  <!-- 우측 상단 다크모드 전환 버튼 -->
+  <button id="theme-toggle" class="fixed-btn">🌞 테마 전환</button>
 
   <!-- 검색한 영화 정보 표시 -->
   <div class="search-info">
