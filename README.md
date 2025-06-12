@@ -44,6 +44,7 @@
  ┃    ┣ 📜search.css
  ┃    ┣ 📜searchResearch.css
  ┃    ┣ 📜style.css
+ ┃    ┣ 📜tournament.css
  ┣ ┗ 📂html
  ┃    ┣ 📜index.html
  ┃    ┣ 📜mypage.html
