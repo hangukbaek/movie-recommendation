@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const query = urlParams.get('query');
   const searchQueryElement = document.getElementById('search-query');
   const movieListContainer = document.getElementById('movie-list-container');
+
+  
   
   // 검색어 표시
   searchQueryElement.textContent = query;
@@ -37,8 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(credits => {
               const mainCast = credits.cast?.slice(0, 2).map(actor => actor.name).join(', ') || '정보 없음';
 
-              console.log(`개봉 연도: ${releaseYear}, 평점: ${rating}, 주연: ${mainCast}`);  // 콘솔에 데이터 확인
-
               // 영화 카드 생성
               const movieCard = document.createElement('div');
               movieCard.className = 'movie-card';
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4>📅 <strong>개봉연도:</strong> ${releaseYear}</h4>
                     <h4>⭐ <strong>평점:</strong> ${rating}</h4>
                     <h4>🎭 <strong>주연:</strong> ${mainCast}</h4>
-                    <button onclick="loadMovieDetail(${movie.id})">🔍 자세히 보기</button>
+                    <button onclick="openMoviePopup(${movie.id})">🔍 자세히 보기</button>
                   </div>
                 </div>
               `;
@@ -75,64 +75,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-  // 새로고침 버튼 추가
-  const refreshButton = document.createElement('button');
-  refreshButton.textContent = '새로고침';
-  refreshButton.className = 'refresh-btn';
-  refreshButton.addEventListener('click', () => {
-    location.reload();  // 페이지 새로고침
-  });
+// 팝업을 여는 함수
+function openMoviePopup(movieId) {
+  const popup = document.getElementById("movie-popup");
+  const popupBody = document.getElementById("popup-body");
+  popup.style.display = "flex";
+  popupBody.innerHTML = "<p>로딩 중...</p>";
 
-  // 새로고침 버튼을 페이지에 추가
-  document.body.appendChild(refreshButton);
+  fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${tmdbKey}&language=ko-KR`)
+    .then(res => res.json())
+    .then(async movie => {
+      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${tmdbKey}&language=ko-KR`);
+      const credits = await creditsRes.json();
 
-// 영화 상세 정보를 기존 페이지에 덮어씌우는 함수
-function loadMovieDetail(movieId) {
-  const BASE_URL = 'https://api.themoviedb.org/3';
-  const tmdbKey = '999dc9586a0cbbaf8d1f914c3b6bcdff';
+      const genres = movie.genres.map(g => g.name).join(', ');
+      const castList = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
 
-  // 영화 상세 페이지로 덮어씌울 컨테이너
-  const movieDetailContainer = document.getElementById('movie-list-container');
-
-  // API 호출하여 영화 상세 정보 가져오기
-  fetch(`${BASE_URL}/movie/${movieId}?api_key=${tmdbKey}&language=ko-KR`)
-    .then(response => response.json())
-    .then(movie => {
-      movieDetailContainer.innerHTML = `
-        <div class="movie-detail">
-          <h1>${movie.title}</h1>
-          <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
-          <p><strong>📅개봉일:</strong> ${movie.release_date}</p>
-          <p><strong>🎬장르:</strong> ${movie.genre_ID}</p>
-          <p><span id="star-rating">${displayRating(movie.vote_average)}</span></p>
-          <p><strong>평점:</strong> ${movie.vote_average}</p>
-          <p><strong>'⭐':2점 '🌟' 1점 '☆':0점
-          <p><strong>줄거리:</strong> ${movie.overview || '설명이 제공되지 않았습니다.'}</p>
-        </div>
+      popupBody.innerHTML = `
+        <h2>${movie.title}</h2>
+        <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}" />
+        <p><strong>장르:</strong> ${genres}</p>
+        <p><strong>주연:</strong> ${castList}</p>
+        <p><strong>개봉일:</strong> ${movie.release_date}</p>
+        <p><strong>평점:</strong> ${movie.vote_average}</p>
+        <p><strong>줄거리:</strong><br>${movie.overview || '줄거리가 제공되지 않았습니다.'}</p>
       `;
     })
     .catch(err => {
-      console.error('영화 상세 정보를 불러오는 데 실패했습니다.', err);
-      movieDetailContainer.innerHTML = '<p>영화 상세 정보를 불러오는 데 실패했습니다.</p>';
+      popupBody.innerHTML = "<p>영화 정보를 불러오지 못했습니다.</p>";
+      console.error("팝업 오류:", err);
     });
 }
 
-// 별점 표시 함수
-function displayRating(vote_average) {
-    const fullStar = '⭐'; // 꽉 찬 별
-    const halfStar = '🌟'; // 반별
-    const emptyStar = '☆'; // 빈 별
-    let stars = '';
-
-    // 평점을 반영한 별의 개수를 계산
-    const fullStarsCount = Math.floor(vote_average / 2); // 꽉 찬 별 개수
-    const halfStarsCount = vote_average % 2 >= 1 ? 1 : 0; // 반별 개수
-    const emptyStarsCount = 5 - fullStarsCount - halfStarsCount; // 빈 별 개수
-
-    // 별 모양을 생성
-    stars += fullStar.repeat(fullStarsCount);
-    stars += halfStar.repeat(halfStarsCount);
-    stars += emptyStar.repeat(emptyStarsCount);
-
-    return stars;
-}
+// 팝업 외부 클릭 또는 닫기 버튼 처리
+window.addEventListener("click", (e) => {
+  const popup = document.getElementById("movie-popup");
+  if (e.target === popup) popup.style.display = "none";
+});
+document.getElementById("popup-close").addEventListener("click", () => {
+  document.getElementById("movie-popup").style.display = "none";
+});

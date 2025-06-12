@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>검색 결과</title>
   <!-- 기존 스타일시트 불러오기 -->
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="searchResult.css" />
+  <link rel="stylesheet" href="searchResultstyle.css" />
 </head>
+
 <body>
   <header>
     <div class="header-left">
@@ -30,7 +32,14 @@
   <!-- 영화 목록 표시 컨테이너 (중앙 정렬) -->
   <div id="movie-list-container" class="container"></div>
 
-  <!-- 기능 포함된 JS 파일 -->
-  <script src="searchResult.js"></script>
+
+  <div id="movie-popup" class="popup">
+    <div id="popup-body" class="popup-body">
+      <button id="popup-close" class="close-btn">×</button>
+    </div>
+
+    <!-- 기능 포함된 JS 파일 -->
+    <script src="searchResult.js"></script>
 </body>
+
 </html>
