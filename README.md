@@ -29,21 +29,31 @@
 📦project-root
  ┣ 📂public
  ┃ ┗ 📂scripts
- ┃   ┣ 📜main.js
- ┃   ┣ 📜genre.js
  ┃   ┣ 📜dailyrank.js
+ ┃   ┣ 📜genre.js
+ ┃   ┣ 📜main.js
+ ┃   ┗ 📜mypage.js
  ┃   ┣ 📜weeklyrank.js
+ ┃   ┗ 📜search.js
  ┃   ┗ 📜searchResearch.js
+ ┃   ┗ 📜toppeople.js
+ ┃   ┗ 📜weeklyrank.js
+ ┃   ┗ 📜tournament.js
  ┣ ┗ 📂css
- ┃    ┣ 📜style.css
+ ┃    ┣ 📜mypage.css
+ ┃    ┣ 📜search.css
  ┃    ┣ 📜searchResearch.css
+ ┃    ┣ 📜style.css
  ┣ ┗ 📂html
  ┃    ┣ 📜index.html
+ ┃    ┣ 📜mypage.html
  ┃    ┣ 📜search.html
  ┃    ┣ 📜searchResearch.html
+ ┃    ┣ 📜tournament.html
  ┣ 📂server
  ┃ ┗ 📜server.js
  ┣ 📜package.json
+ ┣ 📜packagelock.json
  ┣ 📜개발일지.txt
  ┗ 📜README.md
 ```
