@@ -1,3 +1,28 @@
+document.addEventListener("DOMContentLoaded", () => {
+      const loginBtn = document.getElementById("googleLoginBtn");
+      if (loginBtn) {
+        loginBtn.addEventListener("click", () => {
+          const currentPath = window.location.pathname + window.location.search;
+          window.location.href = `/auth/google?redirect=${encodeURIComponent(currentPath)}`;
+        });
+      }
+
+      // JWT 저장 처리
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get("token");
+
+      if (token) {
+        localStorage.setItem("token", token);
+        console.log("✅ 로그인 성공: JWT가 저장되었습니다.");
+
+        // token 제거한 URL로 새로고침 없이 주소창 정리
+        urlParams.delete("token");
+        const newUrl =
+          window.location.pathname +
+          (urlParams.toString() ? "?" + urlParams.toString() : "");
+        history.replaceState({}, "", newUrl);
+      }
+    });
 // HTML 문서가 완전히 로딩된 후 실행
 document.addEventListener("DOMContentLoaded", () => {
   // 🔍 검색창 및 버튼, 검색 기록 영역 DOM 요소 참조
@@ -120,31 +145,4 @@ logoutBtn.addEventListener("click", () => {
 // 🧍 마이페이지 버튼 클릭 시: 마이페이지로 이동
 myPageBtn.addEventListener("click", () => {
   window.location.href = "/mypage.html";
-});
-
-//다크모드 전환 함수
-function toggleTheme() {
-  const currentTheme = document.documentElement.getAttribute("data-theme");
-  if (currentTheme === "dark") {
-    document.documentElement.removeAttribute("data-theme");
-    localStorage.setItem("theme", "light");
-  } else {
-    document.documentElement.setAttribute("data-theme", "dark");
-    localStorage.setItem("theme", "dark");
-  }
-}
-
-// 테마 전환
-document.getElementById('theme-toggle').addEventListener('click', () => {
-  const root = document.documentElement;
-  const isDark = root.getAttribute('data-theme') === 'dark';
-  if (isDark) {
-    root.removeAttribute('data-theme');
-    localStorage.removeItem('theme');
-    document.getElementById('theme-toggle').textContent = '🌞 테마 전환';
-  } else {
-    root.setAttribute('data-theme', 'dark');
-    localStorage.setItem('theme', 'dark');
-    document.getElementById('theme-toggle').textContent = '🌙 테마 전환';
-  }
 });
