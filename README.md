@@ -28,17 +28,6 @@
 ```plaintext
 📦project-root
  ┣ 📂public
- ┃ ┗ 📂scripts
- ┃   ┣ 📜dailyrank.js
- ┃   ┣ 📜genre.js
- ┃   ┣ 📜main.js
- ┃   ┗ 📜mypage.js
- ┃   ┣ 📜weeklyrank.js
- ┃   ┗ 📜search.js
- ┃   ┗ 📜searchResearch.js
- ┃   ┗ 📜toppeople.js
- ┃   ┗ 📜weeklyrank.js
- ┃   ┗ 📜tournament.js
  ┣ ┗ 📂css
  ┃    ┣ 📜mypage.css
  ┃    ┣ 📜search.css
@@ -51,12 +40,24 @@
  ┃    ┣ 📜search.html
  ┃    ┣ 📜searchResearch.html
  ┃    ┣ 📜tournament.html
+ ┃ ┗ 📂scripts
+ ┃   ┣ 📜dailyrank.js
+ ┃   ┣ 📜genre.js
+ ┃   ┣ 📜main.js
+ ┃   ┗ 📜mypage.js
+ ┃   ┣ 📜weeklyrank.js
+ ┃   ┗ 📜search.js
+ ┃   ┗ 📜searchResearch.js
+ ┃   ┗ 📜toppeople.js
+ ┃   ┗ 📜weeklyrank.js
+ ┃   ┗ 📜tournament.js
  ┣ 📂server
  ┃ ┗ 📜server.js
  ┣ 📜package.json
  ┣ 📜packagelock.json
  ┣ 📜개발일지.txt
  ┗ 📜README.md
+ ┗ 📜.env.env
 ```
 
 ---
@@ -81,7 +82,7 @@
 
 4. 브라우저에서 확인
    ```
-   http://localhost:포트번호
+   http://localhost:포트번호(3000)
    ```
 
 ---
@@ -97,7 +98,6 @@
 
 - 사용자 로그인 기능 추가
 - 영화 평점 기반 추천 알고리즘 개선
-- 다크모드 UI 지원
 
 ---
 
