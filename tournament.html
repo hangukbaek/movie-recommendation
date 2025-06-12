@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <title>나만의 GOAT 영화 월드컵</title>
   <link rel="stylesheet" href="tournament.css">
   <link href="https://fonts.googleapis.com/css2?family=Cafe24+Ssurround&display=swap" rel="stylesheet">
 </head>
+
 <body>
   <!-- 모달 -->
   <div class="modal-overlay" id="modal">
     <div class="modal-content">
+      <button class="back-btn" onclick="history.back()">← 뒤로가기</button>
       <h2 class="modal-title">🎬 나만의 GOAT 영화 월드컵</h2>
       <p class="modal-subtitle">총 라운드를 선택하세요.</p>
       <select id="round-select">
@@ -24,8 +27,10 @@
     </div>
   </div>
 
-  <!-- 본 게임 -->
+
+
   <div class="tournament-container" id="tournament-area" style="display: none;">
+    <button class="back-btn" onclick="history.back()">← 뒤로가기</button>
     <div class="tournament-title">🎬 나만의 GOAT 영화 이상형 월드컵</div>
     <div class="round-label" id="round-label"></div>
     <div class="match-area" id="match-area"></div>
@@ -34,4 +39,5 @@
 
   <script src="tournament.js"></script>
 </body>
+
 </html>

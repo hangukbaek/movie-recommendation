@@ -11,6 +11,8 @@ const inputGender = document.getElementById('input-gender');
 const inputAge = document.getElementById('input-age');
 const recContainer = document.getElementById('genre-recommendations');
 
+const tmdbKey = '999dc9586a0cbbaf8d1f914c3b6bcdff'; 
+
 window.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
   if (!token) return;
@@ -207,33 +209,29 @@ function openMoviePopup(movieId) {
   popup.style.display = "flex";
   popupBody.innerHTML = "<p>로딩 중...</p>";
 
-  const apiKey = "999dc9586a0cbbaf8d1f914c3b6bcdff";
+  fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${tmdbKey}&language=ko-KR`)
+    .then(res => res.json())
+    .then(async movie => {
+      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${tmdbKey}&language=ko-KR`);
+      const credits = await creditsRes.json();
 
- 
-  Promise.all([
-    fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=ko-KR`).then(res => res.json()),
-    fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${apiKey}&language=ko-KR`).then(res => res.json())
-  ])
-  .then(([movie, credits]) => {
-    const genres = movie.genres.map(g => g.name).join(", ");
-    const Actors = credits.cast.slice(0, 5).map(actor => actor.name).join(", ");
+      const genres = movie.genres.map(g => g.name).join(', ');
+      const castList = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
 
-    popupBody.innerHTML = `
-      <h2>${movie.title}</h2>
-      <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}" />
-      <div style="overflow: hidden">
+      popupBody.innerHTML = `
+        <h2>${movie.title}</h2>
+        <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}" />
+        <p><strong>장르:</strong> ${genres}</p>
+        <p><strong>주연:</strong> ${castList}</p>
         <p><strong>개봉일:</strong> ${movie.release_date}</p>
         <p><strong>평점:</strong> ${movie.vote_average}</p>
-        <p><strong>장르:</strong> ${genres}</p>
-        <p><strong>주연 배우:</strong> ${Actors}</p>
-        <p><strong>줄거리:</strong><br/>${movie.overview || '줄거리가 제공되지 않았습니다.'}</p>
-      </div>
-    `;
-  })
-  .catch(err => {
-    popupBody.innerHTML = "<p>영화 정보를 불러오지 못했습니다.</p>";
-    console.error("팝업 로딩 실패:", err);
-  });
+        <p><strong>줄거리:</strong><br>${movie.overview || '줄거리가 제공되지 않았습니다.'}</p>
+      `;
+    })
+    .catch(err => {
+      popupBody.innerHTML = "<p>영화 정보를 불러오지 못했습니다.</p>";
+      console.error("팝업 오류:", err);
+    });
 }
 
 // 팝업 외부 클릭 또는 닫기 버튼 처리

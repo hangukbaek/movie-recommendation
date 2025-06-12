@@ -135,3 +135,23 @@ body {
   font-weight: bold;
   color: white;
 }
+
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 16px;
+  background-color: #5dade2;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: background-color 0.3s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.back-btn:hover {
+  background-color: #c7d7ec;
+}
