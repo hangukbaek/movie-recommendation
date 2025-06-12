@@ -458,4 +458,90 @@ header h1 {
   text-align: left;
 }
 
+/* 팝업 전체 배경 */
+.movie-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* 팝업 콘텐츠 영역 */
+.popup-content {
+  background-color: #fff;
+  width: 80%;
+  max-width: 900px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 32px;
+  border-radius: 14px;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  font-family: 'Noto Sans KR', sans-serif;
+  box-sizing: border-box;
+}
+
+/* 닫기 버튼 */
+.popup-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.popup-close:hover {
+  color: #ff4d4d;
+}
+
+/* 포스터 이미지 */
+#popup-body img {
+  float: left;
+  margin-right: 24px;
+  width: 250px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 영화 제목 */
+#popup-body h2 {
+  margin-top: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #222;
+}
+
+/* 일반 텍스트 */
+#popup-body p {
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: #333;
+  margin: 6px 0;
+  overflow-y: auto;
+}
+
+/* 강조 텍스트 */
+#popup-body p strong {
+  font-weight: 600;
+  display: inline-block;
+  min-width: 72px;
+  color: #111;
+}
+
+
+
+
+
+
 

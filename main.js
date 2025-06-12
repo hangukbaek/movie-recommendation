@@ -1,10 +1,10 @@
-// ✅ 다크 모드 적용 유지
+// 다크 모드 적용 유지
 const savedTheme = localStorage.getItem("theme");
 if (savedTheme === "dark") {
   document.documentElement.setAttribute("data-theme", "dark");
 }
 
-// ✅ 로그인 상태 확인 및 버튼 활성화
+// 로그인 상태 확인 및 버튼 활성화
 const token = localStorage.getItem("token");
 const loginStatus = document.getElementById("login-status");
 const loginBtn = document.getElementById("googleLoginBtn");
@@ -50,7 +50,7 @@ myPageBtn?.addEventListener("click", () => {
   window.location.href = "/mypage.html";
 });
 
-// ✅ 슬라이드 버튼 제어 함수 (핫랭킹용)
+// 슬라이드 버튼 제어 함수 (핫랭킹용)
 let hotMovieIndex = 0;
 let hotActorIndex = 0;
 
@@ -72,7 +72,7 @@ function slideHotActor(direction) {
   slider.style.transform = `translateX(-${hotActorIndex * 100}%)`;
 }
 
-// ✅ 다크모드 전환
+// 다크모드 전환
 function toggleTheme() {
   const currentTheme = document.documentElement.getAttribute("data-theme");
   if (currentTheme === "dark") {
@@ -85,41 +85,82 @@ function toggleTheme() {
 }
 
 // 영화 상세 정보 페이지
-window.addEventListener('DOMContentLoaded', async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const movieId = urlParams.get('movieId');
+// window.addEventListener('DOMContentLoaded', async () => {
+//   const urlParams = new URLSearchParams(window.location.search);
+//   const movieId = urlParams.get('movieId');
 
-  const detailContainer = document.getElementById('movie-detail');
+//   const detailContainer = document.getElementById('movie-detail');
 
-  if (!movieId) {
-    detailContainer.innerHTML = '<p>유효한 영화 ID가 없습니다.</p>';
-    return;
-  }
+//   if (!movieId) {
+//     detailContainer.innerHTML = '<p>유효한 영화 ID가 없습니다.</p>';
+//     return;
+//   }
 
-  try {
-    // 영화 기본 정보 요청
-    const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=999dc9586a0cbbaf8d1f914c3b6bcdff&language=ko-KR`);
-    const movie = await res.json();
+//   try {
+//     // 영화 기본 정보 요청
+//     const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=999dc9586a0cbbaf8d1f914c3b6bcdff&language=ko-KR`);
+//     const movie = await res.json();
 
-    // 출연진 정보 요청
-    const creditRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=999dc9586a0cbbaf8d1f914c3b6bcdff&language=ko-KR`);
-    const credits = await creditRes.json();
+//     // 출연진 정보 요청
+//     const creditRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=999dc9586a0cbbaf8d1f914c3b6bcdff&language=ko-KR`);
+//     const credits = await creditRes.json();
 
-    // 장르와 주연 배우 추출
-    const genres = movie.genres.map(g => g.name).join(', ');
-    const castList = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
+//     // 장르와 주연 배우 추출
+//     const genres = movie.genres.map(g => g.name).join(', ');
+//     const castList = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
 
-    detailContainer.innerHTML = `
-      <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
-      <h2>제목: ${movie.title}</h2>
-      <p><strong>장르:</strong> ${genres}</p>
-      <p><strong>주연:</strong> ${castList}</p>
-      <p><strong>개봉일:</strong> ${movie.release_date}</p>
-      <p><strong>평점:</strong> ${movie.vote_average}</p>
-      <p><strong>줄거리:</strong> ${movie.overview || '줄거리가 제공되지 않았습니다.'}</p>
-    `;
-  } catch (err) {
-    detailContainer.innerHTML = '<p>영화 정보를 불러오는 데 실패했습니다.</p>';
-    console.error(err);
-  }
+//     detailContainer.innerHTML = `
+//       <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+//       <h2>제목: ${movie.title}</h2>
+//       <p><strong>장르:</strong> ${genres}</p>
+//       <p><strong>주연:</strong> ${castList}</p>
+//       <p><strong>개봉일:</strong> ${movie.release_date}</p>
+//       <p><strong>평점:</strong> ${movie.vote_average}</p>
+//       <p><strong>줄거리:</strong> ${movie.overview || '줄거리가 제공되지 않았습니다.'}</p>
+//     `;
+//   } catch (err) {
+//     detailContainer.innerHTML = '<p>영화 정보를 불러오는 데 실패했습니다.</p>';
+//     console.error(err);
+//   }
+// });
+
+function openMoviePopup(movieId) {
+  const popup = document.getElementById("movie-popup");
+  const popupBody = document.getElementById("popup-body");
+  popup.style.display = "flex";
+  popupBody.innerHTML = "<p>로딩 중...</p>";
+
+  fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=999dc9586a0cbbaf8d1f914c3b6bcdff&language=ko-KR`)
+    .then(res => res.json())
+    .then(async data => {
+      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=999dc9586a0cbbaf8d1f914c3b6bcdff&language=ko-KR`);
+      const credits = await creditsRes.json();
+      const genres = data.genres.map(g => g.name).join(', ');
+      const castList = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
+
+      popupBody.innerHTML = `
+        <h2>${data.title}</h2>
+        <img src="https://image.tmdb.org/t/p/w300${data.poster_path}" alt="${data.title}" />
+        <p><strong>장르:</strong> ${genres}</p>
+        <p><strong>주연:</strong> ${castList}</p>
+        <p><strong>개봉일:</strong> ${data.release_date}</p>
+        <p><strong>평점:</strong> ${data.vote_average}</p>
+        <p><strong>줄거리:</strong><br/>${data.overview}</p>
+      `;
+    })
+    .catch(err => {
+      popupBody.innerHTML = "<p>영화 정보를 불러오지 못했습니다.</p>";
+      console.error("팝업 로딩 실패:", err);
+    });
+}
+
+document.getElementById("popup-close").addEventListener("click", () => {
+  document.getElementById("movie-popup").style.display = "none";
 });
+
+window.addEventListener("click", (e) => {
+  const popup = document.getElementById("movie-popup");
+  if (e.target === popup) popup.style.display = "none";
+});
+
+
