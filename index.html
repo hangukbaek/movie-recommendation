@@ -7,17 +7,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Cafe24+Ssurround&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <script defer src="main.js"></script>
-  <script defer src="genre.js"></script>
-  <script defer src="weeklyrank.js"></script>
-  <script defer src="dailyrank.js"></script>
-  <script defer src="search.js"></script>
+  <script defer src="weeklyRank.js"></script>
+  <script defer src="dailyRank.js"></script>
+  <script defer src="genre.js"></script> 
+  <script defer src="toppeople.js"></script> <!-- ✅ 추가 -->
 </head>
-<body>
+<body id="body">
   <header>
     <div class="header-left">
-      <h1>🎬 오늘의 영화 추천</h1>
+      <h1 id="search-title" onclick="window.location.reload();">🎬 오늘의 영화 추천</h1>
     </div>
-
+  
     <div class="header-center">
       <div class="search-bar">
         <input type="text" id="search-input" placeholder="영화 제목을 검색하세요" />
@@ -25,13 +25,12 @@
         <div id="search-history" class="search-history" style="display: none;"></div>
       </div>
     </div>
-
+  
     <div class="header-right">
       <span id="login-status" style="color: white; margin-right: 10px;"></span>
       <button class="btn-login" id="googleLoginBtn">로그인</button>
       <button class="btn-logout" id="logoutBtn" style="display:none;">로그아웃</button>
       <button class="btn-mypage" id="myPageBtn" style="display:none;">마이페이지</button>
-      <button id="theme-toggle" class="fixed-btn">🌞 테마 전환</button>
     </div>
   </header>
 
@@ -48,10 +47,7 @@
     <button>판타지</button>
   </div>
 
-  <!-- 검색 결과를 표시할 컨테이너 -->
-  <div id="search-result-container" class="container" style="display:none; margin-top: 20px;"></div>
-
-  <!-- 슬라이드 컨테이너 (초기 숨김) -->
+  <!-- ✅ 슬라이드 컨테이너 (초기 숨김) -->
   <div class="container hidden" id="genre-movie-container" style="margin-top: 20px;"></div>
 
   <div class="container">
@@ -61,7 +57,7 @@
     </div>
 
     <section id="hot-movie-section">
-      <h2> 이 주의 hot 랭킹(영화) </h2>
+      <h2> 이 주의 Hot 랭킹(영화) </h2>
       <div class="slider-container">
         <div id="hot-movie-list-wrapper">
           <div id="slider-viewport">
@@ -73,5 +69,68 @@
       </div>
     </section>
   </div>
+
+  <div class="goat-section" style="margin-top: 20px;">
+    <!-- 왼쪽 박스: 나의 GOAT 영화 -->
+    <div class="goat-box-left">
+      <div class="goat-box-title">나의 GOAT 영화는?</div>
+      <div class="goat-thumbnail" onclick="location.href='tournament.html'">
+        <img src="images/goat_thumbnail.jpg">
+        <div class="goat-caption">이상형 월드컵 시작하기</div>
+      </div>
+    </div>
+
+    <!-- 오른쪽 박스: 핫한 인물 -->
+    <div class="goat-box-right">
+      <div class="goat-box-title">거장들 작품 둘러보기 </div>
+
+      <div class="person-tabs">
+        <button class="person-tab active" data-role="director">감독</button>
+        <button class="person-tab" data-role="actor">배우</button>
+      </div>
+
+      <div id="person-list" class="person-list">
+        <!-- JS로 썸네일 동적 삽입 예정 -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const loginBtn = document.getElementById("googleLoginBtn");
+      if (loginBtn) {
+        loginBtn.addEventListener("click", () => {
+          const currentPath = window.location.pathname + window.location.search;
+          window.location.href = `/auth/google?redirect=${encodeURIComponent(currentPath)}`;
+        });
+      }
+
+      // JWT 저장 처리
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get("token");
+
+      if (token) {
+        localStorage.setItem("token", token);
+        console.log("✅ 로그인 성공: JWT가 저장되었습니다.");
+
+        // token 제거한 URL로 새로고침 없이 주소창 정리
+        urlParams.delete("token");
+        const newUrl =
+          window.location.pathname +
+          (urlParams.toString() ? "?" + urlParams.toString() : "");
+        history.replaceState({}, "", newUrl);
+      }
+    });
+  </script>
+
+  <div id="person-modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h3 id="modal-name"></h3>
+    <img id="modal-profile" />
+    <div id="modal-movies" class="modal-movie-list"></div>
+  </div>
+
+</div>
 </body>
 </html>
