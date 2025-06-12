@@ -8,16 +8,16 @@
   <link rel="stylesheet" href="style.css" />
   <script defer src="main.js"></script>
   <script defer src="weeklyRank.js"></script>
-  <script defer src="dailyRank.js"></script>
-  <script defer src="genre.js"></script> 
-  <script defer src="toppeople.js"></script> <!-- ✅ 추가 -->
+  <script defer src="genre.js"></script>
+  <script defer src="toppeople.js"></script> 
+  <script defer src="upcoming.js"></script>
 </head>
 <body>
   <header>
     <div class="header-left">
       <h1>🎬 오늘의 영화 추천</h1>
     </div>
-  
+    
     <div class="header-center">
       <div class="search-bar">
         <input type="text" id="search-input" placeholder="영화 제목을 검색하세요" />
@@ -34,7 +34,7 @@
     </div>
   </header>
 
-  <div class="genre-buttons">
+  <section class="genre-buttons">
     <button>액션</button>
     <button>코미디</button>
     <button>SF</button>
@@ -45,53 +45,66 @@
     <button>애니메이션</button>
     <button>다큐멘터리</button>
     <button>판타지</button>
+  </section>
+
+  <div id="genre-movie-container" class="hidden"></div>
+
+  <!-- 주간 박스오피스 -->
+  <h2 class="section-title">주간 박스오피스 순위</h2>
+  <div class="slider-wrapper">
+    <button id="slide-left">◀</button>
+    <div id="hot-movie-list"></div>
+    <button id="slide-right">▶</button>
   </div>
 
-  <!-- ✅ 슬라이드 컨테이너 (초기 숨김) -->
-  <div class="container hidden" id="genre-movie-container" style="margin-top: 20px;"></div>
-
-  <div class="container">
-    <div class="list-box">
-      <div class="section-title">(일간) 박스오피스 순위</div>
-      <ul id="boxoffice-list" class="boxoffice-cards"></ul>
+  <div class="slider-wrapper">
+    <div class="slider-container">
+      <!-- 이곳에 JS로 카드들이 들어갑니다 -->
+      <div id="movies-container" class="slider-track"></div>
     </div>
+  </div>
 
-    <section id="hot-movie-section">
-      <h2> 이 주의 Hot 랭킹(영화) </h2>
-      <div class="slider-container">
-        <div id="hot-movie-list-wrapper">
-          <div id="slider-viewport">
-            <div id="hot-movie-list"></div>
-          </div>      
-          <button id="slide-left" class="slide-button" aria-label="이전">❮</button>
-          <button id="slide-right" class="slide-button" aria-label="다음">❯</button>
+  <section class="upcoming-wrapper">
+    <h2 class="section-title">이번 달 개봉 예정작</h2>
+    <div id="week-tab-buttons" class="week-tabs"></div>
+    <div id="upcoming-week-container"></div>
+  </section>
+
+  <!-- 탭 버튼 -->
+   <h2 class="section-title">천만 거장들 작품 둘러보기</h2>
+  <div class="person-tabs">
+    <button class="person-tab active" data-role="director">감독</button>
+    <button class="person-tab" data-role="actor">배우</button>
+  </div>
+
+  <!-- 인물 카드 리스트 -->
+  <div class="person-container">
+    <div id="person-list" class="person-list"></div>
+  </div>
+
+  <!-- 인물 상세 모달 -->
+  <div id="person-modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="close-btn">&times;</button>
+      <h3 id="modal-name"></h3>
+      <!-- 모달 상단: 프로필 + 약력 -->
+      <div class="modal-top">
+        <img id="modal-profile" alt="프로필 사진" />
+        <div id="modal-bio" class="modal-bio">
+          <p>약력을 불러오는 중...</p>
         </div>
       </div>
-    </section>
+      <!-- 필모그래피 제목 -->
+      <h4>필모그래피</h4>
+      <!-- 필모그래피 리스트 -->
+      <div id="modal-movies" class="modal-movie-list"></div>
+    </div>
   </div>
 
-    <div class="goat-section" style="margin-top: 20px;">
-    <!-- 왼쪽 박스: 나의 GOAT 영화 -->
-    <div class="goat-box-left">
-      <div class="goat-box-title">나의 GOAT 영화는?</div>
-      <div class="goat-thumbnail" onclick="location.href='tournament.html'">
-        <img src="images/goat_thumbnail.jpg">
-        <div class="goat-caption">이상형 월드컵 시작하기</div>
-      </div>
-    </div>
-
-    <!-- 오른쪽 박스: 핫한 인물 -->
-    <div class="goat-box-right">
-      <div class="goat-box-title">거장들 작품 둘러보기 </div>
-
-      <div class="person-tabs">
-        <button class="person-tab active" data-role="director">감독</button>
-        <button class="person-tab" data-role="actor">배우</button>
-      </div>
-
-      <div id="person-list" class="person-list">
-        <!-- JS로 썸네일 동적 삽입 예정 -->
-      </div>
+  <div id="movie-popup" class="movie-popup" style="display:none;">
+    <div class="popup-content">
+      <button id="popup-close" class="popup-close">✖</button>
+      <div id="popup-body"></div>
     </div>
   </div>
 
@@ -122,15 +135,6 @@
       }
     });
   </script>
-
-  <div id="person-modal" class="modal hidden">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h3 id="modal-name"></h3>
-    <img id="modal-profile" />
-    <div id="modal-movies" class="modal-movie-list"></div>
-  </div>
-
 </div>
 </body>
 </html>
