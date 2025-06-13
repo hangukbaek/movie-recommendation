@@ -1,3 +1,4 @@
+// BASE_URL과 tmdbKey 변수를 코드 맨 앞에 선언하세요.
 const BASE_URL = 'https://api.themoviedb.org/3';
 const tmdbKey = '999dc9586a0cbbaf8d1f914c3b6bcdff';
 
@@ -6,8 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const query = urlParams.get('query');
   const searchQueryElement = document.getElementById('search-query');
   const movieListContainer = document.getElementById('movie-list-container');
-
-  
   
   // 검색어 표시
   searchQueryElement.textContent = query;
@@ -50,14 +49,17 @@ document.addEventListener('DOMContentLoaded', () => {
                   </div>
                   <div class="movie-info">
                     <h3>${movie.title}</h3>
-                    <h4>📅 <strong>개봉연도:</strong> ${releaseYear}</h4>
-                    <h4>⭐ <strong>평점:</strong> ${rating}</h4>
-                    <h4>🎭 <strong>주연:</strong> ${mainCast}</h4>
-                    <button onclick="openMoviePopup(${movie.id})">🔍 자세히 보기</button>
+                    <h4> <strong>개봉연도:</strong> ${releaseYear}</h4>
+                    <h4> <strong>평점: ⭐ </strong> ${rating}</h4>
+                    <h4> <strong>주연:</strong> ${mainCast}</h4>
                   </div>
                 </div>
               `;
-              
+
+              // 포스터 클릭 시 팝업 열기
+              const posterImage = movieCard.querySelector('.poster-image');
+              posterImage.addEventListener('click', () => openMoviePopup(movie.id));
+
               // 영화 카드를 영화 목록에 추가
               movieListContainer.appendChild(movieCard);
             })
@@ -76,35 +78,37 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 팝업을 여는 함수
-function openMoviePopup(movieId) {
+async function openMoviePopup(movieId) {
   const popup = document.getElementById("movie-popup");
   const popupBody = document.getElementById("popup-body");
   popup.style.display = "flex";
   popupBody.innerHTML = "<p>로딩 중...</p>";
 
-  fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${tmdbKey}&language=ko-KR`)
-    .then(res => res.json())
-    .then(async movie => {
-      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${tmdbKey}&language=ko-KR`);
-      const credits = await creditsRes.json();
+  try {
+    // 영화 상세 정보 가져오기
+    const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${tmdbKey}&language=ko-KR`);
+    const movie = await movieRes.json();
 
-      const genres = movie.genres.map(g => g.name).join(', ');
-      const castList = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
+    // 주연 배우 정보 가져오기
+    const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${tmdbKey}&language=ko-KR`);
+    const credits = await creditsRes.json();
 
-      popupBody.innerHTML = `
-        <h2>${movie.title}</h2>
-        <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}" />
-        <p><strong>장르:</strong> ${genres}</p>
-        <p><strong>주연:</strong> ${castList}</p>
-        <p><strong>개봉일:</strong> ${movie.release_date}</p>
-        <p><strong>평점:</strong> ${movie.vote_average}</p>
-        <p><strong>줄거리:</strong><br>${movie.overview || '줄거리가 제공되지 않았습니다.'}</p>
-      `;
-    })
-    .catch(err => {
-      popupBody.innerHTML = "<p>영화 정보를 불러오지 못했습니다.</p>";
-      console.error("팝업 오류:", err);
-    });
+    const genres = movie.genres.map(g => g.name).join(', ');
+    const castList = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
+
+    popupBody.innerHTML = `
+      <h2>${movie.title}</h2>
+      <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}" />
+      <p><strong>장르:</strong> ${genres}</p>
+      <p><strong>주연:</strong> ${castList}</p>
+      <p><strong>개봉일:</strong> ${movie.release_date}</p>
+      <p><strong>평점:</strong> ${movie.vote_average}</p>
+      <p><strong>줄거리:</strong><br>${movie.overview || '줄거리가 제공되지 않았습니다.'}</p>
+    `;
+  } catch (err) {
+    popupBody.innerHTML = "<p>영화 정보를 불러오지 못했습니다.</p>";
+    console.error("팝업 오류:", err);
+  }
 }
 
 // 팝업 외부 클릭 또는 닫기 버튼 처리
@@ -112,6 +116,11 @@ window.addEventListener("click", (e) => {
   const popup = document.getElementById("movie-popup");
   if (e.target === popup) popup.style.display = "none";
 });
-document.getElementById("popup-close").addEventListener("click", () => {
-  document.getElementById("movie-popup").style.display = "none";
-});
+
+// 팝업 닫기 버튼 추가 - 팝업에 닫기 버튼을 제대로 연결
+const closeButton = document.getElementById("popup-close-btn");
+if (closeButton) {
+  closeButton.addEventListener("click", () => {
+    document.getElementById("movie-popup").style.display = "none";
+  });
+}

@@ -1,98 +1,85 @@
 /* 📍 검색어 표시 스타일 */
 .search-info {
-  margin: 30px auto 20px;
-  padding: 15px 25px;
-  max-width: 600px;
-  background-color: #f8f9fa;
-  border-left: 6px solid #007bff;
+  margin: 20px 0 5px 0; /* 왼쪽으로 붙이기 */
+  padding: 15px 15px;
+  max-width: 60px;
+  background-color: #fff; /* 흰색 배경 */
   border-radius: 8px;
-  font-family: 'Segoe UI', sans-serif;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: left; /* 왼쪽 정렬 */
 }
 
 .search-info p {
+  font-weight: bold;
   margin: 0;
   font-size: 18px;
-  color: #333;
+  color: #000; /* 검정 글씨 */
   font-weight: 500;
 }
 
 .search-info span {
   font-weight: bold;
-  color: #007bff;
-}
-
-/* 🎨 테마 다크모드 변수 설정 */
-:root[data-theme="dark"] {
-  --bg-color: #1e1e1e;
-  --text-color: #f0f0f0;
-  --card-bg: #2a2a2a;
-  --btn-bg: #3a3f4b;
-  --btn-text: #ffffff;
-  --selected-bg: #4a90e2;
-  --selected-text: #ffffff;
-  --title-color: #ffffff;
-  --recommend-bg: #2d2d2d;
+  color: black;
 }
 
 body {
-  background-color: var(--bg-color, #f4f4f4);
-  color: var(--text-color, #000);
+  background-color: #fff; /* 흰색 배경 */
+  color: #000; /* 검정 글씨 */
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
   padding: 0;
+  text-align: left; /* 전체 텍스트 왼쪽 정렬 */
 }
 
 header {
-  background-color: #2f4250;
+  background-color: black;
   padding: 20px;
-  text-align: center;
+  text-align: left; /* 왼쪽 정렬 */
   color: white;
 }
 
 .header-left h1 {
   margin: 0;
   font-size: 28px;
-  color: #ff99cc;
+  color: white;
 }
 
 /* 검색어 표시 */
 .search-info {
-  margin: 30px auto 20px;
-  padding: 15px 25px;
+  margin-left: 0; /* 왼쪽으로 붙이기 */
+  padding: 20px;
   max-width: 600px;
-  background-color: #f8f9fa;
-  border-left: 6px solid #007bff;
+  background-color: #fff; /* 흰색 배경 */
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: left; /* 왼쪽 정렬 */
 }
 
 .search-info p {
   margin: 0;
   font-size: 18px;
   font-weight: 500;
-  color: #333;
+  color: #000; /* 검정 글씨 */
 }
 
 .search-info span {
   font-weight: bold;
-  color: #007bff;
+  color: black;
 }
 
-/* 고정 버튼 */
+/* 고정 버튼 뒤로가기 버튼 */
 #back-button, #theme-toggle {
   position: absolute;
   top: 20px;
   padding: 8px 16px;
-  background-color: #007bff;
+  background-color: black;
   color: white;
+  
   font-size: 14px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   transition: background-color 0.2s ease-in-out;
 }
+
 #back-button {
   right: 20px;
 }
@@ -101,16 +88,18 @@ header {
 }
 #back-button:hover,
 #theme-toggle:hover {
-  background-color: #505866;
+  border: solid #fff; /* 흰색 윤곽선 추가 */
 }
 
 /* 전체 컨테이너 */
-.container {
+.movie-list-container {
+  margin: 30px 0 20px 0; /* 왼쪽으로 붙이기 */
+  padding: 15px 25px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; /* 왼쪽 정렬 */
   gap: 20px;
-  padding: 40px 10%;
+  padding: 40px 0; /* 왼쪽으로 맞추기 */
   box-sizing: border-box;
 }
 
@@ -118,55 +107,60 @@ header {
 .movie-card {
   width: 100%;
   max-width: 800px;
-  background-color: var(--card-bg, #ffffff);
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   overflow: hidden;
   padding: 20px;
   box-sizing: border-box;
+  display: flex;  /* Flexbox to make elements align horizontally */
+  align-items: stretch; /* Ensure elements stretch to the same height */
 }
 
 /* 내부 정렬 */
 .movie-content {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch; /* 높이를 일치시키도록 설정 */
   gap: 20px;
+  width: 100%;
 }
 
 /* 포스터 영역 */
 .poster-wrapper {
   flex-shrink: 0;
+  display: flex;
+  align-items: stretch; /* Ensure poster wrapper stretches to the same height */
 }
 
 /* 포스터 이미지 */
 .poster-image {
-  width: 120px;
+  width: 130px;
+  height: 200px; /* 높이 값을 지정하여 이미지 크기 일치 */
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  object-fit: cover; /* 이미지 비율을 유지하며 크기 맞춤 */
 }
 
 /* 영화 정보 */
 .movie-info {
-  flex: 1;
-  padding-top: 4px;
-  text-align: left;
+  justify-content: space-between; /* 정보를 포스터 이미지 높이에 맞춰 정렬 */
+  text-align: left; /* 왼쪽 정렬 */
   font-size: 16px;
-  color: var(--text-color, #222);
-  line-height: 1.6;
+  color: #000; /* 검정 글씨 */
 }
 .movie-info h3 {
+  flex: 1;
+  justify-content: space-between; /* 정보를 포스터 이미지 높이에 맞춰 정렬 */
+  text-align: left; /* 왼쪽 정렬 */
   font-size: 20px;
   margin-bottom: 12px;
-  color: #222;
+  color: #000; /* 검정 글씨 */
 }
 .movie-info p {
   margin: 6px 0;
   font-size: 16px;
-  color: #333;
+  color: #000; /* 검정 글씨 */
   font-weight: 500;
 }
 .movie-info strong {
-  color: #111;
+  color: #000; /* 검정 글씨 */
   font-weight: 600;
 }
 .movie-info a {
@@ -197,15 +191,17 @@ header {
 }
 
 .popup-body {
-  background-color: #fff;
+  background-color: #fff; /* 흰색 배경 */
   padding: 20px;
   border-radius: 8px;
   max-width: 600px;
   max-height: 80%;
   overflow-y: auto;
-  text-align: center;
+  text-align: left; /* 왼쪽 정렬 */
+  justify-content: flex-start; /* 텍스트가 포스터와 일렬로 정렬되도록 */
+  gap: 20px; /* 이미지와 텍스트 사이 간격 */
 }
-
+/*포스터 이미지*/
 .popup img {
   float: left;
   margin-right: 24px;
@@ -214,26 +210,27 @@ header {
   object-fit: cover;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  
 }
 
-.popup .close-btn {
+.popup-close-btn {
   position: absolute;
-  top: 16px;
-  right: 20px;
-  font-size: 24px;
+  top: 12px;
+  right: 16px;
+  font-size: 20px;
   background: none;
   border: none;
-  color: #333;
   cursor: pointer;
-  transition: color 0.2s;
+  color: #999;
+  z-index: 10000; /* 팝업보다 위로 배치 */
 }
 
-.popup-close:hover {
+.popup-close-btn:hover {
   color: #ff4d4d;
 }
 
 .popup-content {
-  background-color: #fff;
+  background-color: #fff; /* 흰색 배경 */
   width: 80%;
   max-width: 900px;
   max-height: 80vh;
@@ -251,7 +248,7 @@ header {
   margin-top: 0;
   font-size: 22px;
   font-weight: 700;
-  color: #222;
+  color: #000; /* 검정 글씨 */
   text-align: left;
 }
 
@@ -259,7 +256,7 @@ header {
 #popup-body p {
   font-size: 15.5px;
   line-height: 1.7;
-  color: #333;
+  color: #000; /* 검정 글씨 */
   margin: 6px 0;
   overflow-y: auto;
   text-align: left;
@@ -270,5 +267,5 @@ header {
   font-weight: 600;
   display: inline-block;
   min-width: 72px;
-  color: #111;
+  color: #000; /* 검정 글씨 */
 }

@@ -16,30 +16,32 @@
       <!-- 검색 결과 제목을 클릭하면 새로고침하도록 설정 -->
       <h1 id="search-title" onclick="window.location.reload();">🎬 검색 결과</h1>
     </div>
+    <div class="header-center">
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="영화 제목을 검색하세요" />
+        <button id="search-button">🔍</button>
+        <div id="search-history" class="search-history" style="display: none;"></div>
+      </div>
+    </div>
   </header>
-
-  <!-- 좌측 상단 뒤로가기 버튼 -->
-  <button id="back-button" onclick="goBack()">🔙 뒤로 가기</button>
-
-  <!-- 우측 상단 다크모드 전환 버튼 -->
-  <button id="theme-toggle" class="fixed-btn">🌞 테마 전환</button>
-
-  <!-- 검색한 영화 정보 표시 -->
+  <!-- 검색한 영화 정보 표시-->
   <div class="search-info">
-    <p>검색한 영화: <span id="search-query"></span></p>
-  </div>
+    <p>검색 결과: <span id="search-query"></span></p>
+  </div> 
 
-  <!-- 영화 목록 표시 컨테이너 (중앙 정렬) -->
+  <!-- 영화 목록 표시 컨테이너-->
   <div id="movie-list-container" class="container"></div>
-
+<!-- 뒤로가기 버튼 -->
+  <button id="back-button" onclick="window.history.back();">뒤로가기</button>
 
   <div id="movie-popup" class="popup">
     <div id="popup-body" class="popup-body">
-      <button id="popup-close" class="close-btn">×</button>
+      <button id="popup-close-btn" class="popup-close-btn">&times;</button>
     </div>
 
     <!-- 기능 포함된 JS 파일 -->
     <script src="searchResult.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
