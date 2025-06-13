@@ -25,15 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const genreId   = genreMap[genreName];
       const container = document.getElementById('genre-movie-container');
 
-      // 동일 장르 클릭 시 토글
-      if (currentGenre === genreName) {
-        container.classList.add('hidden');
-        container.classList.remove('fade-in');
-        btn.classList.remove('active');
-        currentGenre = null;
-        return;
-      }
-
       // 새로운 장르 선택
       currentGenre = genreName;
       buttons.forEach(b => b.classList.remove('active'));
@@ -75,7 +66,7 @@ async function fetchAndRenderGenreMovies(genreId, genreName) {
 function renderMovies(containerId, genreName, koreanMovies, foreignMovies) {
   const container = document.getElementById(containerId);
   container.innerHTML = `
-    <h2>🎬 ${genreName} 추천 영화</h2>
+    <h2>${genreName} 추천 영화</h2>
     <div class="genre-section">
       <div class="genre-block">
         <h3>🇰🇷 국내 영화</h3>

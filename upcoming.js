@@ -51,7 +51,7 @@ async function renderUpcomingWeek(week) {
 
   const movies = await fetchUpcomingMoviesFiltered(start, end);
   if (movies.length === 0) {
-    container.innerHTML = `<p>${label} (${start} ~ ${end}) 개봉 예정작이 없습니다.</p>`;
+    container.innerHTML = `<p style="font-size: 18px">${label} (${start} ~ ${end}) 개봉 예정작이 없습니다.</p>`;
     return;
   }
 
@@ -89,7 +89,9 @@ async function renderUpcomingWeek(week) {
     const info = document.createElement('div');
     info.innerHTML = `
       <p><strong>${movie.title}</strong></p>
-      <p style="font-size:13px;color:#888;">${movie.release_date || '개봉일 미정'}</p>
+      <p style="font-size:13px;color:#888;">
+        <strong>개봉일:</strong> ${movie.release_date || '개봉일 미정'}
+      </p>
     `;
 
     card.appendChild(img);
