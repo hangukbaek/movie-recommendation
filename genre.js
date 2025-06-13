@@ -1,3 +1,5 @@
+// genre.js: 장르별 영화 추천 + 모달 팝업 + 토글 기능
+
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 const genreMap = {
@@ -47,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-
 async function fetchAndRenderGenreMovies(genreId, genreName) {
   const container = document.getElementById('genre-movie-container');
   container.classList.remove('hidden');
@@ -91,52 +92,10 @@ function renderMovies(containerId, genreName, koreanMovies, foreignMovies) {
     </div>
   `;
 
-  // 슬라이더 로직이 있다면 여기에 호출
   if (typeof initializeGenreSlider === 'function') {
     initializeGenreSlider();
   }
 }
-
-
-function openMoviePopup(movieId) {
-  const popup = document.getElementById("movie-popup");
-  const popupBody = document.getElementById("popup-body");
-  popup.style.display = "flex";
-  popupBody.innerHTML = "<p>로딩 중...</p>";
-
-  fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${tmdbKey}&language=ko-KR`)
-    .then(res => res.json())
-    .then(async movie => {
-      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${tmdbKey}&language=ko-KR`);
-      const credits = await creditsRes.json();
-
-      const genres = movie.genres.map(g => g.name).join(', ');
-      const castList = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
-
-      popupBody.innerHTML = `
-        <h2>${movie.title}</h2>
-        <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}" />
-        <p><strong>장르:</strong> ${genres}</p>
-        <p><strong>주연:</strong> ${castList}</p>
-        <p><strong>개봉일:</strong> ${movie.release_date}</p>
-        <p><strong>평점:</strong> ${movie.vote_average}</p>
-        <p><strong>줄거리:</strong><br>${movie.overview || '줄거리가 제공되지 않았습니다.'}</p>
-      `;
-    })
-    .catch(err => {
-      popupBody.innerHTML = "<p>영화 정보를 불러오지 못했습니다.</p>";
-      console.error("팝업 오류:", err);
-    });
-}
-
-// 팝업 닫기
-window.addEventListener("click", e => {
-  const popup = document.getElementById("movie-popup");
-  if (e.target === popup) popup.style.display = "none";
-});
-document.getElementById("popup-close").addEventListener("click", () => {
-  document.getElementById("movie-popup").style.display = "none";
-});
 
 function generateMovieCards(movies) {
   return movies.map(movie => `
@@ -151,3 +110,43 @@ function generateMovieCards(movies) {
   `).join('');
 }
 
+async function openMoviePopup(movieId) {
+  if (!movieId) return;
+  const popup     = document.getElementById('movie-popup');
+  const popupBody = document.getElementById('popup-body');
+  popup.style.display = 'flex';
+  popupBody.innerHTML = '<p>로딩 중...</p>';
+
+  try {
+    const movieRes   = await fetch(`${BASE_URL}/movie/${movieId}?api_key=${tmdbKey}&language=ko-KR`);
+    const movie      = await movieRes.json();
+    const creditsRes = await fetch(`${BASE_URL}/movie/${movieId}/credits?api_key=${tmdbKey}&language=ko-KR`);
+    const credits    = await creditsRes.json();
+
+    const genres = movie.genres.map(g => g.name).join(', ');
+    const cast   = credits.cast.slice(0, 5).map(c => c.name).join(', ');
+
+    popupBody.innerHTML = `
+      <h2>${movie.title}</h2>
+      <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}" />
+      <p><strong>장르:</strong> ${genres}</p>
+      <p><strong>주연:</strong> ${cast}</p>
+      <p><strong>개봉일:</strong> ${movie.release_date}</p>
+      <p><strong>평점:</strong> ${movie.vote_average}</p>
+      <p><strong>줄거리:</strong><br>${movie.overview || '줄거리가 제공되지 않았습니다.'}</p>
+    `;
+  } catch (err) {
+    popupBody.innerHTML = '<p>영화 정보를 불러오지 못했습니다.</p>';
+    console.error('팝업 오류:', err);
+  }
+}
+
+// 모달 닫기
+document.getElementById('popup-close').addEventListener('click', () => {
+  document.getElementById('movie-popup').style.display = 'none';
+});
+window.addEventListener('click', e => {
+  if (e.target.id === 'movie-popup') {
+    e.target.style.display = 'none';
+  }
+});

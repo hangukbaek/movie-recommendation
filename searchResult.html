@@ -13,15 +13,22 @@
 <body>
   <header>
     <div class="header-left">
-      <!-- 검색 결과 제목을 클릭하면 새로고침하도록 설정 -->
-      <h1 id="search-title" onclick="window.location.reload();">🎬 검색 결과</h1>
+      <h1 id="search-title" onclick="location.href='index.html'">🎬 오늘의 영화 추천</h1>
     </div>
+  
     <div class="header-center">
       <div class="search-bar">
         <input type="text" id="search-input" placeholder="영화 제목을 검색하세요" />
-        <button id="search-button">🔍</button>
+        <button id="search-button"><img src="images/search.png" alt=""></button>
         <div id="search-history" class="search-history" style="display: none;"></div>
       </div>
+    </div>
+  
+    <div class="header-right">
+      <span id="login-status" style="color: white; margin-right: 10px;"></span>
+      <button class="btn-login" id="googleLoginBtn">로그인</button>
+      <button class="btn-logout" id="logoutBtn" style="display:none;">로그아웃</button>
+      <button class="btn-mypage" id="myPageBtn" style="display:none;">마이페이지</button>
     </div>
   </header>
   <!-- 검색한 영화 정보 표시-->
@@ -31,8 +38,6 @@
 
   <!-- 영화 목록 표시 컨테이너-->
   <div id="movie-list-container" class="container"></div>
-<!-- 뒤로가기 버튼 -->
-  <button id="back-button" onclick="window.history.back();">뒤로가기</button>
 
   <div id="movie-popup" class="popup">
     <div id="popup-body" class="popup-body">

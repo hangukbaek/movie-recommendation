@@ -19,14 +19,19 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("person-modal").classList.add("hidden");
   });
 
-  // 모달 외부 클릭 시 닫기 (추가)
-  const modalOverlay = document.getElementById("person-modal");
-  modalOverlay.addEventListener("click", (e) => {
-    // e.target 이 overlay (id="person-modal") 일 때만 닫기
-    if (e.target === modalOverlay) {
-      modalOverlay.classList.add("hidden");
+  document.addEventListener("click", (e) => {
+  const modal = document.getElementById("person-modal");
+
+  // 모달이 숨겨져 있으면 무시
+  if (modal.classList.contains("hidden")) return;
+
+  // 모달 내용 영역을 제외한 다른 영역 클릭 시만 닫기
+  const isInsideModalContent = e.target.closest(".modal-content"); // `.modal-content`는 실제 내부 영역 클래스
+  if (!isInsideModalContent) {
+    modal.classList.add("hidden");
     }
   });
+
 
   loadPeople();  // 초기 로딩
 });
