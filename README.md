@@ -52,12 +52,12 @@
  ┃   ┗ 📜weeklyrank.js
  ┃   ┗ 📜tournament.js
  ┣ 📂server
+ ┃ ┗ 📜.env.env
+ ┃ ┗📜package.json
+ ┃ ┗📜packagelock.json
  ┃ ┗ 📜server.js
- ┣ 📜package.json
- ┣ 📜packagelock.json
  ┣ 📜개발일지.txt
  ┗ 📜README.md
- ┗ 📜.env.env
 ```
 
 ---
