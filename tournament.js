@@ -131,21 +131,71 @@ function chooseMovie(index, selected) {
   nextRound.push(winner);
   matchIndex += 2;
   showNextMatch();
+  localStorage.setItem
 }
 
 function showWinner(movie) {
   const winnerBox = document.getElementById("winner-box");
   const trailerContent = movie.trailer
-    ? `<iframe width="600" height="360" src="${movie.trailer}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+    ? `<iframe width="600" height="360" src="${movie.trailer}" frameborder="0" allowfullscreen></iframe>`
     : `<div style="width:600px; height:360px; background:#111; display:flex; justify-content:center; align-items:center; color:white;">예고편 없음</div>`;
 
   winnerBox.innerHTML = `
-    <p>🎉 당신의 최종 선택!</p>
+    <p style="font-size: 18px;">🎉 당신의 최종 선택!</p>
     ${trailerContent}
-    <h2 style="color: white;">${movie.title}</h2>
+    <h2 style="color: white; margin-top: 12px;">${movie.title}</h2>
+    
+    <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <button id="complete-btn" style="
+          padding: 10px 24px;
+          background-color: #16a085;  /* 청록 계열 */
+          color: white;
+          border: none;
+          border-radius: 30px;
+          font-size: 15px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+        " 
+        onmouseover="this.style.backgroundColor='#12876f'" 
+        onmouseout="this.style.backgroundColor='#16a085'">
+          ✅ 선택 완료
+      </button>
+
+      <button id="restart-btn" style="
+        padding: 10px 24px;
+        background-color: #2C3E50;
+        color: white;
+        border: none;
+        border-radius: 30px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+      " onmouseover="this.style.backgroundColor='#34495E'" 
+        onmouseout="this.style.backgroundColor='#2C3E50'">
+        다시 하기
+      </button>
+    </div>
   `;
+
   winnerBox.style.display = "block";
+
+  // ✅ 완료 버튼 클릭 → 저장 후 마이페이지 이동
+  document.getElementById("complete-btn").addEventListener("click", () => {
+    localStorage.setItem("goatMovie", JSON.stringify(movie));
+    window.location.href = "mypage.html";
+  });
+
+  // 🔁 다시하기 버튼 → localStorage 초기화
+  document.getElementById("restart-btn").addEventListener("click", () => {
+    localStorage.removeItem("goatMovie");
+    window.location.href = "tournament.html";
+  });
 }
+
 
 function updateRoundLabel() {
   const roundLabel = document.getElementById("round-label");
@@ -173,3 +223,4 @@ document.addEventListener("DOMContentLoaded", () => {
     startTournament(roundCount);
   });
 });
+

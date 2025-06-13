@@ -11,7 +11,7 @@ const inputGender = document.getElementById('input-gender');
 const inputAge = document.getElementById('input-age');
 const recContainer = document.getElementById('genre-recommendations');
 
-const tmdbKey = '999dc9586a0cbbaf8d1f914c3b6bcdff'; 
+const tmdbKey = '999dc9586a0cbbaf8d1f914c3b6bcdff';
 
 window.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
@@ -241,4 +241,101 @@ window.addEventListener("click", (e) => {
 });
 document.getElementById("popup-close").addEventListener("click", () => {
   document.getElementById("movie-popup").style.display = "none";
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const goatBox = document.getElementById("goat-box");
+  const thumbnailDiv = document.getElementById("goat-thumbnail");
+
+  const savedGoat = localStorage.getItem("goatMovie");
+
+  if (savedGoat) {
+    const goatMovie = JSON.parse(savedGoat);
+    const trailerKey = goatMovie.trailer?.split("/").pop();
+    const thumb = trailerKey
+      ? `https://img.youtube.com/vi/${trailerKey}/0.jpg`
+      : "images/goat_thumbnail.jpg";
+
+    thumbnailDiv.innerHTML = `
+      <img src="${thumb}" alt="${goatMovie.title}" />
+      <div class="goat-caption">${goatMovie.title}</div>
+    `;
+
+    thumbnailDiv.addEventListener("click", () => {
+      openGoatMoviePopup(goatMovie);
+    });
+  } else {
+    // 아직 선택하지 않았을 때 기본 동작
+    thumbnailDiv.addEventListener("click", () => {
+      window.location.href = "tournament.html";
+    });
+  }
+
+  window.openGoatMoviePopup = (movie) => {
+    const popup = document.getElementById("movie-popup");
+    const popupBody = document.getElementById("popup-body");
+    popup.style.display = "flex";
+
+    const trailerContent = movie.trailer
+      ? `<iframe width="600" height="360" src="${movie.trailer}" frameborder="0" allowfullscreen></iframe>`
+      : `<div style="width:600px; height:360px; background:#111; display:flex; justify-content:center; align-items:center; color:white;">예고편 없음</div>`;
+
+    popupBody.innerHTML = `
+      <div style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+      ">
+        <p style="font-size: 18px; font-weight: bold; margin-bottom: 16px;">🎥 당신의 최종 선택</p>
+
+        <div style="
+          width: 100%;
+          max-width: 640px;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        ">
+          ${trailerContent}
+        </div>
+
+        <h2 style="margin-top: 16px; font-size: 22px; color: #222;">${movie.title}</h2>
+
+       <button id="restart-goat-btn" style="
+          margin-top: 24px;
+          padding: 10px 24px;
+          background-color: #2C3E50;
+          color: #ffffff;
+          border: none;
+          border-radius: 30px;
+          font-size: 15px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+          font-family: 'Noto Sans KR', sans-serif;
+        " onmouseover="this.style.backgroundColor='#34495E'; this.style.transform='scale(1.03)'"
+          onmouseout="this.style.backgroundColor='#2C3E50'; this.style.transform='scale(1)'">
+          이상형 월드컵 다시 하기
+      </button>
+      </div>
+    `;
+
+    // 버튼 이벤트 연결
+    const restartBtn = document.getElementById("restart-goat-btn");
+    restartBtn.addEventListener("click", () => {
+      localStorage.removeItem("goatMovie");
+      window.location.href = "tournament.html";
+    });
+  };
+
+  document.getElementById("popup-close").addEventListener("click", () => {
+    document.getElementById("movie-popup").style.display = "none";
+  });
+
+  window.addEventListener("click", (e) => {
+    const popup = document.getElementById("movie-popup");
+    if (e.target === popup) popup.style.display = "none";
+  });
 });

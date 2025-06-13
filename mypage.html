@@ -13,7 +13,6 @@
 <body>
   <button id="return-home" class="fixed-btn" onclick="window.location.href='/'">메인으로</button>
 
-
   <h1 id="page-title">
     <a href="" style="text-decoration: none; color: inherit;">마이페이지</a>
   </h1>
@@ -69,15 +68,16 @@
   </div>
 
   <div class="goat-section" style="margin-top: 40px;">
-    <div class="goat-box-left">
+    <div class="goat-box-left" id="goat-box">
       <div class="goat-box-title">나의 GOAT 영화</div>
-      <div class="goat-thumbnail" onclick="location.href='tournament.html'">
+      <div class="goat-thumbnail" id="goat-thumbnail">
         <img src="images/goat_thumbnail.jpg" alt="GOAT 월드컵 썸네일" />
         <div class="goat-caption">이상형 월드컵 시작하기</div>
       </div>
     </div>
   </div>
 
+  <!-- 팝업 -->
   <div id="movie-popup" class="movie-popup">
     <div class="popup-content">
       <button id="popup-close" class="popup-close">✖</button>

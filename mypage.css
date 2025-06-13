@@ -24,7 +24,7 @@ body {
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   max-width: 200px;
-  margin: 20px auto;
+  margin: 10px auto;
   font-size: 24px;
 }
 
@@ -119,9 +119,17 @@ button[type="submit"]:hover {
 }
 
 #return-home {
-  left: 20px;
-  background: #dce5f5;
-  color: #2C3E50;
+  text-align: center;
+  color: var(--title-color, #2C3E50);
+  background: var(--card-bg, #ffffff);padding: 20px;
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  max-width: 200px;
+  margin: 10px auto;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 #edit-profile {
@@ -383,3 +391,14 @@ button[type="submit"]:hover {
   background: rgba(0, 0, 0, 0.6);
   text-align: center;
 }
+
+/* .restart-goat {
+  margin-top: 12px;
+  padding: 10px 20px;
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+} */

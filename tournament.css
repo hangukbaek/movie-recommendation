@@ -140,18 +140,21 @@ body {
   position: absolute;
   top: 20px;
   left: 20px;
-  padding: 10px 16px;
-  background-color: #5dade2;
-  color: white;
+  padding: 10px 20px;
+  background-color: #2C3E50;  /* 어두운 네이비 */
+  color: #ffffff;
   border: none;
-  border-radius: 20px;
-  font-size: 16px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
   z-index: 1000;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.3);
   font-family: 'Noto Sans KR', sans-serif;
 }
 
 .back-btn:hover {
-  background-color: #c7d7ec;
+  background-color: #1a2533; /* 더 어두운 네이비로 */
+  transform: scale(1.05);    
 }
