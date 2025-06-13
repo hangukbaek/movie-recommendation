@@ -1,0 +1,444 @@
+/* 📍 검색어 표시 스타일 */
+.search-info {
+  margin: 20px 0 5px 0; /* 왼쪽으로 붙이기 */
+  padding: 15px 15px;
+  max-width: 60px;
+  background-color: #fff; /* 흰색 배경 */
+  border-radius: 8px;
+  text-align: left; /* 왼쪽 정렬 */
+}
+
+.search-info p {
+  font-weight: bold;
+  margin: 0;
+  font-size: 18px;
+  color: #000; /* 검정 글씨 */
+  font-weight: 500;
+}
+
+.search-info span {
+  font-weight: bold;
+  color: black;
+}
+
+body {
+  background-color: #fff; /* 흰색 배경 */
+  color: #000; /* 검정 글씨 */
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: left; /* 전체 텍스트 왼쪽 정렬 */
+}
+
+header {
+  background-color: black;
+  padding: 20px;
+  text-align: left; /* 왼쪽 정렬 */
+  color: white;
+}
+
+.header-left h1 {
+  margin: 0;
+  font-size: 28px;
+  color: white;
+}
+
+/* 검색어 표시 */
+.search-info {
+  margin-left: 0; /* 왼쪽으로 붙이기 */
+  padding: 20px;
+  max-width: 600px;
+  background-color: #fff; /* 흰색 배경 */
+  border-radius: 8px;
+  text-align: left; /* 왼쪽 정렬 */
+}
+
+.search-info p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #000; /* 검정 글씨 */
+}
+
+.search-info span {
+  font-weight: bold;
+  color: black;
+}
+
+/* 고정 버튼 뒤로가기 버튼 */
+#back-button, #theme-toggle {
+  position: absolute;
+  top: 20px;
+  padding: 8px 16px;
+  background-color: black;
+  color: white;
+  
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+#back-button {
+  right: 20px;
+}
+#theme-toggle {
+  left: 20px;
+}
+#back-button:hover,
+#theme-toggle:hover {
+  border: solid #fff; /* 흰색 윤곽선 추가 */
+}
+
+/* 전체 컨테이너 */
+.movie-list-container {
+  margin: 30px 0 20px 0; /* 왼쪽으로 붙이기 */
+  padding: 15px 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* 왼쪽 정렬 */
+  gap: 20px;
+  padding: 40px 0; /* 왼쪽으로 맞추기 */
+  box-sizing: border-box;
+}
+
+/* 카드 */
+.movie-card {
+  width: 100%;
+  max-width: 800px;
+  overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;  /* Flexbox to make elements align horizontally */
+  align-items: stretch; /* Ensure elements stretch to the same height */
+}
+
+/* 내부 정렬 */
+.movie-content {
+  display: flex;
+  align-items: stretch; /* 높이를 일치시키도록 설정 */
+  gap: 20px;
+  width: 100%;
+}
+
+/* 포스터 영역 */
+.poster-wrapper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: stretch; /* Ensure poster wrapper stretches to the same height */
+}
+
+/* 포스터 이미지 */
+.poster-image {
+  width: 130px;
+  height: 200px; /* 높이 값을 지정하여 이미지 크기 일치 */
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  object-fit: cover; /* 이미지 비율을 유지하며 크기 맞춤 */
+}
+
+/* 영화 정보 */
+.movie-info {
+  justify-content: space-between; /* 정보를 포스터 이미지 높이에 맞춰 정렬 */
+  text-align: left; /* 왼쪽 정렬 */
+  font-size: 16px;
+  color: #000; /* 검정 글씨 */
+}
+.movie-info h3 {
+  flex: 1;
+  justify-content: space-between; /* 정보를 포스터 이미지 높이에 맞춰 정렬 */
+  text-align: left; /* 왼쪽 정렬 */
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #000; /* 검정 글씨 */
+}
+.movie-info p {
+  margin: 6px 0;
+  font-size: 16px;
+  color: #000; /* 검정 글씨 */
+  font-weight: 500;
+}
+.movie-info strong {
+  color: #000; /* 검정 글씨 */
+  font-weight: 600;
+}
+.movie-info a {
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease-in-out;
+}
+.movie-info a:hover {
+  border-bottom: 1px solid #007bff;
+}
+
+/* 팝업 스타일 */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-body {
+  background-color: #fff; /* 흰색 배경 */
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  max-height: 80%;
+  overflow-y: auto;
+  text-align: left; /* 왼쪽 정렬 */
+  justify-content: flex-start; /* 텍스트가 포스터와 일렬로 정렬되도록 */
+  gap: 20px; /* 이미지와 텍스트 사이 간격 */
+}
+/*포스터 이미지*/
+.popup img {
+  float: left;
+  margin-right: 24px;
+  width: 250px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  
+}
+
+.popup-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  z-index: 10000; /* 팝업보다 위로 배치 */
+}
+
+.popup-close-btn:hover {
+  color: #ff4d4d;
+}
+
+.popup-content {
+  background-color: #fff; /* 흰색 배경 */
+  width: 80%;
+  max-width: 900px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 32px;
+  border-radius: 14px;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  font-family: 'Noto Sans KR', sans-serif;
+  box-sizing: border-box;
+}
+
+/* 영화 제목 */
+#popup-body h2 {
+  margin-top: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #000; /* 검정 글씨 */
+  text-align: left;
+}
+
+/* 일반 텍스트 */
+#popup-body p {
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: #000; /* 검정 글씨 */
+  margin: 6px 0;
+  overflow-y: auto;
+  text-align: left;
+}
+
+/* 강조 텍스트 */
+#popup-body p strong {
+  font-weight: 600;
+  display: inline-block;
+  min-width: 72px;
+  color: #000; /* 검정 글씨 */
+}
+
+  /* 색상 변수 정의 */
+  :root {
+    --bg-color: #F9FAFC;
+    --header-color: black;
+    --accent-blue: black;
+    --hot-pink: #FF6B81;
+    --text-main: #333;
+    --card-bg: #ffffff;
+    /* 섹션 간격을 한 곳에서 관리 */
+    --section-spacing: 20px;
+  }
+
+  /* 검색창 */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: clamp(300px, 40vw, 1000px);
+    height: 40px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 0 14px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-top: var(--section-spacing);
+    margin-bottom: var(--section-spacing);
+  }
+
+  .search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    padding: 0 8px;
+    padding-left: 45px;
+    background: transparent;
+    color: var(--text-main);
+  }
+
+  .search-bar button {
+    position: absolute;
+    transform: translateY(5%);
+    left: 15px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-main);
+  }
+
+  .search-bar button img {
+    width: 20px;         /* 원하는 너비 */
+    height: 20px;        /* 원하는 높이 */
+    object-fit: contain; /* 비율 유지 */
+    display: block;      /* 불필요한 여백 제거 */
+  }
+
+    header .header-center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    min-width: 300px;
+  }
+
+   /* 헤더 */
+  header {
+    background-color: var(--header-color);
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  header .header-left {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  header .header-center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    min-width: 300px;
+  }
+
+  header .header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+
+  .header-bar h1 {
+    margin: 0;
+    font-size: clamp(18px, 2vw, 32px);
+    justify-self: start;
+    color: white;
+  }
+
+  header h1 {
+    font-size: clamp(18px, 2vw, 500px);
+    color: white;
+    text-align: center;
+    font-family: 'Cafe24 Ssurround', sans-serif;
+  }
+
+  .header-right button {
+    background: transparent;                 /* 기본 배경을 투명으로 */
+    border: 1px solid rgba(0,0,0,0); /* 흰색 테두리, 조금 투명 */
+    color: #fff;                             /* 글자색 흰색 */
+    padding: 6px 14px;                       /* 원하는 여백 조절 */
+    margin-left: 8px;                        /* 버튼 간 간격 */
+    border-radius: 4px;                      /* 모서리 둥글게 */
+    font-size: 0.9rem;                       /* 글자 크기 */
+    cursor: pointer;                         /* 커서 포인터로 */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* 호버 시 배경과 테두리 강조 */
+  .header-right button:hover {
+    background-color: rgba(255,255,255,0.2); /* 은은한 흰 배경 */
+    border-color: rgba(255,255,255,0.9);     /* 테두리 조금 더 선명하게 */
+  }
+
+  /* 검색창 */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: clamp(300px, 40vw, 1000px);
+    height: 40px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 0 14px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-top: var(--section-spacing);
+    margin-bottom: var(--section-spacing);
+  }
+
+  .search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    padding: 0 8px;
+    padding-left: 45px;
+    background: transparent;
+    color: var(--text-main);
+  }
+
+  .search-bar button {
+    position: absolute;
+    transform: translateY(5%);
+    left: 15px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-main);
+  }
+
+  .search-bar button img {
+    width: 20px;         /* 원하는 너비 */
+    height: 20px;        /* 원하는 높이 */
+    object-fit: contain; /* 비율 유지 */
+    display: block;      /* 불필요한 여백 제거 */
+  }
