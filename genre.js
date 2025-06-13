@@ -20,9 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       const genreName = btn.textContent.trim();
-      const genreId = genreMap[genreName];
+      const genreId   = genreMap[genreName];
       const container = document.getElementById('genre-movie-container');
 
+      // 동일 장르 클릭 시 토글
       if (currentGenre === genreName) {
         container.classList.add('hidden');
         container.classList.remove('fade-in');
@@ -31,29 +32,39 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      // 새로운 장르 선택
       currentGenre = genreName;
       buttons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+
+      // 컨테이너 표시
+      container.classList.remove('hidden');
+      container.classList.add('fade-in');
+
+      // 영화 데이터 로드 및 렌더
       fetchAndRenderGenreMovies(genreId, genreName);
     });
   });
 });
+
 
 async function fetchAndRenderGenreMovies(genreId, genreName) {
   const container = document.getElementById('genre-movie-container');
   container.classList.remove('hidden');
   container.classList.add('fade-in');
 
-const korUrl = `${BASE_URL}/discover/movie?api_key=${tmdbKey}&language=ko-KR&with_genres=${genreId}&with_original_language=ko&sort_by=vote_average.desc&vote_count.gte=100`;
-const foreignUrl = `${BASE_URL}/discover/movie?api_key=${tmdbKey}&language=ko-KR&with_genres=${genreId}&without_original_language=ko&sort_by=vote_average.desc&vote_count.gte=100`;
+  const korUrl     = `${BASE_URL}/discover/movie?api_key=${tmdbKey}&language=ko-KR&with_genres=${genreId}&with_original_language=ko&sort_by=vote_average.desc&vote_count.gte=100`;
+  const foreignUrl = `${BASE_URL}/discover/movie?api_key=${tmdbKey}&language=ko-KR&with_genres=${genreId}&without_original_language=ko&sort_by=vote_average.desc&vote_count.gte=100`;
 
   try {
     const [korRes, foreignRes] = await Promise.all([
       fetch(korUrl).then(res => res.json()),
       fetch(foreignUrl).then(res => res.json()),
     ]);
+    const localMovies   = korRes.results.slice(0, 5);
+    const foreignMovies = foreignRes.results.slice(0, 5);
 
-    renderMovies('genre-movie-container', genreName, korRes.results.slice(0, 5), foreignRes.results.slice(0, 5));
+    renderMovies('genre-movie-container', genreName, localMovies, foreignMovies);
   } catch (error) {
     container.innerHTML = `<p>❌ 영화 정보를 불러오는 데 실패했습니다.</p>`;
     console.error(error);
@@ -63,18 +74,27 @@ const foreignUrl = `${BASE_URL}/discover/movie?api_key=${tmdbKey}&language=ko-KR
 function renderMovies(containerId, genreName, koreanMovies, foreignMovies) {
   const container = document.getElementById(containerId);
   container.innerHTML = `
-    <h2>🎬 장르 추천</h2>
+    <h2>🎬 ${genreName} 추천 영화</h2>
     <div class="genre-section">
       <div class="genre-block">
         <h3>🇰🇷 국내 영화</h3>
-        <div class="genre-slider">${generateMovieCards(koreanMovies)}</div>
+        <div class="genre-slider">
+          ${generateMovieCards(koreanMovies)}
+        </div>
       </div>
       <div class="genre-block">
         <h3>🌍 해외 영화</h3>
-        <div class="genre-slider">${generateMovieCards(foreignMovies)}</div>
+        <div class="genre-slider">
+          ${generateMovieCards(foreignMovies)}
+        </div>
       </div>
     </div>
   `;
+
+  // 슬라이더 로직이 있다면 여기에 호출
+  if (typeof initializeGenreSlider === 'function') {
+    initializeGenreSlider();
+  }
 }
 
 
@@ -121,10 +141,13 @@ document.getElementById("popup-close").addEventListener("click", () => {
 function generateMovieCards(movies) {
   return movies.map(movie => `
     <div class="movie-card">
-      <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}" onclick="openMoviePopup(${movie.id})"/>
+      <img
+        src="https://image.tmdb.org/t/p/w200${movie.poster_path}" 
+        alt="${movie.title}"
+        onclick="openMoviePopup(${movie.id})" 
+      />
       <p>${movie.title}</p>
     </div>
   `).join('');
 }
-
 
